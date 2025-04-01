@@ -148,15 +148,51 @@
             padding: 15px;
             overflow-y: auto;
         }
+        /* Adjust panel ratios */
+        .notes-panel {
+            flex: 2; /* Make notes panel twice as wide */
+        }
+        .predictions-panel {
+            flex: 1; /* Keep predictions panel standard size */
+        }
         .note-text {
             white-space: pre-wrap;
-            font-family: monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 4px;
             border-left: 4px solid #3498db;
             margin-top: 10px;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 15px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        /* Epic-like styling for clinical notes */
+        .epic-style {
+            padding-left: 10px;
+            border-left: 1px solid #ddd;
+        }
+        .note-header {
+            font-weight: bold;
+            margin: 15px 0 8px 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .note-section {
+            margin-bottom: 12px;
+        }
+        .note-separator {
+            margin: 25px 0 20px 0;
+            padding: 10px 15px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #3498db;
+            border-radius: 4px;
+            display: block;
+            border-bottom: 2px solid #2980b9;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
         }
         .prediction-info {
             margin-bottom: 20px;
@@ -187,15 +223,160 @@
             padding: 2px;
             border-radius: 2px;
         }
-        .note-separator {
-            margin: 20px 0 15px 0;
-            border-top: 2px dashed #3498db;
-            padding: 8px 10px;
+        /* Validation controls */
+        .validation-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f7f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .validation-title {
             font-weight: bold;
-            color: #fff;
-            background-color: #3498db;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .validation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .valid-button, .invalid-button {
+            flex: 1;
+            padding: 10px;
+            border: none;
             border-radius: 4px;
-            display: inline-block;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .valid-button {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        .valid-button:hover, .valid-button.selected {
+            background-color: #4caf50;
+            color: white;
+        }
+        .invalid-button {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .invalid-button:hover, .invalid-button.selected {
+            background-color: #f44336;
+            color: white;
+        }
+        .comment-area {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+        .save-results-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .save-results-button:hover {
+            background-color: #388e3c;
+        }
+        .validation-status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .search-box {
+            margin: 15px 0;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .clear-button {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-match {
+            background-color: #ffff00;
+            padding: 2px;
+            border-radius: 2px;
+        }
+        /* Attribution highlighting colors */
+        .highlight-0 { background-color: #fffbd0; }
+        .highlight-1 { background-color: #d4f9d7; }
+        .highlight-2 { background-color: #d4e7f9; }
+        .highlight-3 { background-color: #f9d4f0; }
+        .highlight-4 { background-color: #f9e4d4; }
+        .highlight-5 { background-color: #e5d4f9; }
+        .highlight-6 { background-color: #d4f9f5; }
+        .highlight-7 { background-color: #f2f9d4; }
+        /* New styles for invalid reasons dropdown */
+        .invalid-reasons {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff3f3;
+            border-radius: 4px;
+            border: 1px solid #ffcdd2;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .invalid-reason-option {
+            margin: 8px 0;
+        }
+        .invalid-reason-option label {
+            margin-left: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .submit-button {
+            background-color: #3949ab;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 15px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        .submit-button:hover {
+            background-color: #303f9f;
+        }
+        .submit-button:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -204,7 +385,17 @@
         <h1>Clinical Notes and Predictions Viewer</h1>
         
         <div class="info">
-            <p>Upload your CSV files to view notes and predictions side-by-side. Click on rows to see detailed information.</p>
+            <p>Upload your CSV files to view notes and predictions side-by-side. Review attribution evidence in clinical notes and validate predictions.</p>
+            <div style="margin-top: 10px; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">
+                <strong>Keyboard Shortcuts:</strong>
+                <ul style="margin: 5px 0 0 20px; padding: 0;">
+                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">→</span> Next prediction</li>
+                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">←</span> Previous prediction</li>
+                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">V</span> Mark as Valid</li>
+                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">X</span> Mark as Invalid</li>
+                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">Ctrl+S</span> Save Results</li>
+                </ul>
+            </div>
         </div>
 
         <div class="file-inputs">
@@ -243,14 +434,52 @@
             </div>
             
             <div class="combined-view">
-                <div class="combined-panel">
+                <div class="combined-panel notes-panel">
                     <h2>Clinical Notes</h2>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search in notes...">
+                        <button id="searchButton" class="search-button">Search</button>
+                        <button id="clearButton" class="clear-button">Clear</button>
+                    </div>
                     <div id="noteMetadata"></div>
                     <div id="noteText" class="note-text"></div>
                 </div>
-                <div class="combined-panel">
+                <div class="combined-panel predictions-panel">
                     <h2>Prediction Details</h2>
                     <div id="predictionInfo"></div>
+                    <div class="validation-controls">
+                        <div class="validation-title">Clinical Validation</div>
+                        <div>
+                            <label for="commentArea">Additional Comments:</label>
+                            <textarea id="commentArea" class="comment-area" placeholder="Add any clinical observations or notes here..."></textarea>
+                        </div>
+                        
+                        <div id="invalidReasons" class="invalid-reasons">
+                            <div class="validation-title" style="font-size: 14px; margin: 0 0 10px 0;">Select reason for invalid attribution:</div>
+                            <div class="invalid-reason-option">
+                                <input type="radio" id="reasonHallucination" name="invalidReason" value="hallucination">
+                                <label for="reasonHallucination">Hallucination (the attribution referenced something that did not occur in the notes)</label>
+                            </div>
+                            <div class="invalid-reason-option">
+                                <input type="radio" id="reasonInvalidClinical" name="invalidReason" value="invalid_clinical_reasoning">
+                                <label for="reasonInvalidClinical">Invalid clinical reasoning (based on note content but does NOT follow valid clinical reasoning)</label>
+                            </div>
+                            <div class="invalid-reason-option">
+                                <input type="radio" id="reasonOther" name="invalidReason" value="other">
+                                <label for="reasonOther">Other (please specify in comments)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="validation-buttons">
+                            <button id="validButton" class="valid-button">Valid Attribution</button>
+                            <button id="invalidButton" class="invalid-button">Invalid Attribution</button>
+                        </div>
+                        
+                        <div id="validationStatus" class="validation-status"></div>
+                        
+                        <button id="submitValidation" class="submit-button" disabled>Submit Validation</button>
+                    </div>
+                    <button id="saveResultsButton" class="save-results-button">Save Results</button>
                 </div>
             </div>
         </div>
@@ -276,11 +505,64 @@
         const predictionInfo = document.getElementById('predictionInfo');
         const prevDetailButton = document.getElementById('prevDetail');
         const nextDetailButton = document.getElementById('nextDetail');
+        
+        // Validation elements
+        const validButton = document.getElementById('validButton');
+        const invalidButton = document.getElementById('invalidButton');
+        const commentArea = document.getElementById('commentArea');
+        const validationStatus = document.getElementById('validationStatus');
+        const saveResultsButton = document.getElementById('saveResultsButton');
+        const invalidReasons = document.getElementById('invalidReasons');
+        const submitValidation = document.getElementById('submitValidation');
+        
+        // Search elements
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const clearButton = document.getElementById('clearButton');
+
+        // Variables to track validation state
+        let currentValidationChoice = null;
+        let currentInvalidReason = null;
+
+        // Data object to store validation results
+        const validationResults = {};
 
         // Event listeners
         processButton.addEventListener('click', processFiles);
         prevDetailButton.addEventListener('click', showPreviousDetail);
         nextDetailButton.addEventListener('click', showNextDetail);
+        
+        // Validation event listeners
+        validButton.addEventListener('click', () => setValidation('valid'));
+        invalidButton.addEventListener('click', () => setValidation('invalid'));
+        submitValidation.addEventListener('click', submitValidationResult);
+        saveResultsButton.addEventListener('click', saveValidationResults);
+        
+        // Add listeners for invalid reasons
+        document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                currentInvalidReason = this.value;
+                updateSubmitButton();
+            });
+        });
+        
+        // Search event listeners
+        searchButton.addEventListener('click', searchNotes);
+        clearButton.addEventListener('click', clearSearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchNotes();
+                e.preventDefault();
+            }
+        });
+        
+        // Add keyboard shortcut for clearing search (Escape key)
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                clearSearch();
+                e.preventDefault();
+            }
+        });
 
         // Function to parse CSV files
         function parseCSV(text) {
@@ -587,6 +869,51 @@
             // Update counter
             updatePredictionCounter(index);
             
+            // Update validation UI
+            resetValidationUI();
+            invalidReasons.style.display = 'none';
+            
+            // Clear current state
+            currentValidationChoice = null;
+            currentInvalidReason = null;
+            
+            // Reset invalid reason radio buttons
+            document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Restore validation state if it exists
+            if (validationResults[index]) {
+                const validation = validationResults[index];
+                currentValidationChoice = validation.result;
+                
+                if (validation.result === 'valid') {
+                    validButton.classList.add('selected');
+                } else {
+                    invalidButton.classList.add('selected');
+                    invalidReasons.style.display = 'block';
+                    
+                    // Restore invalid reason if available
+                    if (validation.invalidReason) {
+                        currentInvalidReason = validation.invalidReason;
+                        const reasonInput = document.querySelector(`input[name="invalidReason"][value="${validation.invalidReason}"]`);
+                        if (reasonInput) {
+                            reasonInput.checked = true;
+                        }
+                    }
+                }
+                
+                updateValidationStatus();
+                updateSubmitButton();
+            }
+            
+            // Restore comments if any
+            if (validationResults[index] && validationResults[index].comment) {
+                commentArea.value = validationResults[index].comment;
+            } else {
+                commentArea.value = '';
+            }
+            
             let predHtml = `<div class="prediction-info">`;
             predHtml += `<div class="prediction-title">Prediction: ${prediction.prediction}</div>`;
             
@@ -615,11 +942,12 @@
                     predHtml += `<div>`;
                     
                     if (Array.isArray(attributionItems)) {
-                        attributionItems.forEach(item => {
-                            predHtml += `<span class="attribution-item">${item}</span>`;
+                        attributionItems.forEach((item, idx) => {
+                            const colorIndex = idx % 8; // Use modulo to cycle through the 8 colors
+                            predHtml += `<span class="attribution-item highlight-${colorIndex}">${item}</span>`;
                         });
                     } else {
-                        predHtml += `<span class="attribution-item">${attributionItems}</span>`;
+                        predHtml += `<span class="attribution-item highlight-0">${attributionItems}</span>`;
                     }
                     
                     predHtml += `</div>`;
@@ -686,14 +1014,17 @@
                         }
                     }
                     
-                    // Add separator between notes
-                    if (i > 0) {
-                        combinedText += `<div class="note-separator">--- Note ${i+1} (${note.note_date || 'No date'}) ---</div>`;
-                    } else {
-                        combinedText += `<div class="note-separator">--- Note ${i+1} (${note.note_date || 'No date'}) ---</div>`;
-                    }
+                    // Get note type if available
+                    const noteType = note.note_type || note.type || 'Clinical Note';
+                    const noteDate = note.note_date || note.timestamp || 'No date';
                     
-                    combinedText += noteText;
+                    // Add separator between notes with note type and date
+                    combinedText += `<div class="note-separator">${noteType} - ${noteDate}</div>`;
+                    
+                    // Format the note text with Epic-style formatting
+                    const formattedText = formatEpicStyleNote(noteText);
+                    
+                    combinedText += `<div class="epic-style">${formattedText}</div>`;
                 });
                 
                 // Highlight attribution terms in the combined note text
@@ -714,11 +1045,12 @@
                     }
                     
                     if (Array.isArray(attributionItems)) {
-                        attributionItems.forEach(item => {
+                        attributionItems.forEach((item, idx) => {
                             if (item && combinedText) {
                                 try {
+                                    const colorIndex = idx % 8; // Use modulo to cycle through the 8 colors
                                     const regex = new RegExp(`(${item})`, 'gi');
-                                    combinedText = combinedText.replace(regex, '<span class="highlight">$1</span>');
+                                    combinedText = combinedText.replace(regex, `<span class="highlight-${colorIndex}">$1</span>`);
                                 } catch (e) {
                                     // Skip invalid regex patterns
                                     console.log("Error highlighting term:", item);
@@ -734,10 +1066,21 @@
                 noteText.innerHTML = '<p>No matching notes found for this prediction.</p>';
                 noteMetadata.innerHTML = '';
             }
-            
+                
             detailsPanel.style.display = 'block';
         }
         
+        // Function to format note text in Epic-like style
+        function formatEpicStyleNote(text) {
+            if (!text) return '';
+            
+            // Simply preserve line breaks without any header detection or formatting
+            let formattedText = text.replace(/\n/g, '<br>');
+            
+            // No header detection or formatting - just return the text with line breaks
+            return formattedText;
+        }
+
         // Show previous detail
         function showPreviousDetail() {
             if (currentIndex > 0) {
@@ -761,6 +1104,371 @@
             const counterElement = document.getElementById('predictionCounter');
             counterElement.textContent = `Prediction ${index + 1} of ${predictionsData.length}`;
         }
+
+        // Validation functions
+        function setValidation(result) {
+            // Update the UI for the selected option
+            resetValidationUI();
+            currentValidationChoice = result;
+            
+            if (result === 'valid') {
+                validButton.classList.add('selected');
+                invalidReasons.style.display = 'none';
+                currentInvalidReason = null;
+                // Reset any selected radio buttons
+                document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
+                    radio.checked = false;
+                });
+            } else {
+                invalidButton.classList.add('selected');
+                invalidReasons.style.display = 'block';
+            }
+            
+            updateSubmitButton();
+        }
+        
+        function submitValidationResult() {
+            // Store the validation result along with the comment and invalid reason if applicable
+            const prediction = predictionsData[currentIndex];
+            if (!prediction) {
+                showStatus('No prediction found to validate.', 'error');
+                return;
+            }
+            
+            // Create validation object
+            const validationData = {
+                result: currentValidationChoice,
+                comment: commentArea.value,
+                predictionId: prediction.id || currentIndex,
+                encounterId: prediction.encounter_id,
+                timestamp: new Date().toISOString(),
+                prediction: prediction.prediction
+            };
+            
+            // Add invalid reason if applicable
+            if (currentValidationChoice === 'invalid' && currentInvalidReason) {
+                validationData.invalidReason = currentInvalidReason;
+            }
+            
+            // Store validation
+            validationResults[currentIndex] = validationData;
+            
+            // Update status
+            updateValidationStatus();
+            
+            // Provide feedback
+            showStatus(`Validation submitted successfully`, 'success');
+            
+            // Auto-advance to next prediction if not on the last one
+            const maxIndex = predictionsData.length - 1;
+            if (currentIndex < maxIndex) {
+                setTimeout(() => {
+                    showPredictionDetails(currentIndex + 1);
+                }, 750);
+            } else {
+                // On the last prediction, just disable the submit button
+                submitValidation.disabled = true;
+            }
+        }
+        
+        function updateSubmitButton() {
+            // Enable submit button if a validation choice is selected and, if invalid, a reason is selected
+            if (currentValidationChoice === 'valid') {
+                submitValidation.disabled = false;
+            } else if (currentValidationChoice === 'invalid' && currentInvalidReason) {
+                submitValidation.disabled = false;
+            } else {
+                submitValidation.disabled = true;
+            }
+        }
+        
+        function resetValidationUI() {
+            // Reset button states
+            validButton.classList.remove('selected');
+            invalidButton.classList.remove('selected');
+            validationStatus.style.display = 'none';
+            submitValidation.disabled = true;
+        }
+
+        function saveValidationResults() {
+            // Create a CSV string from the validation results
+            const csvRows = [
+                // Header row
+                ['Index', 'Prediction ID', 'Encounter ID', 'Prediction', 'Attribution', 'Note Text', 'Note Types', 'Validation Result', 'Invalid Reason', 'Comment', 'Validation Timestamp'].join(',')
+            ];
+            
+            // Add a row for each validated prediction
+            for (const [index, validation] of Object.entries(validationResults)) {
+                const idx = parseInt(index);
+                const prediction = predictionsData[idx];
+                if (!prediction) continue;
+                
+                const result = typeof validation === 'string' ? validation : validation.result;
+                const comment = typeof validation === 'string' ? '' : (validation.comment || '').replace(/,/g, ';').replace(/\n/g, ' ');
+                const predictionId = typeof validation === 'string' ? 
+                    (prediction.id || idx) : validation.predictionId;
+                const encounterId = typeof validation === 'string' ?
+                    prediction.encounter_id : validation.encounterId;
+                const timestamp = typeof validation === 'string' ? 
+                    new Date().toISOString() : validation.timestamp;
+                
+                // Get the prediction text
+                const predictionText = prediction.prediction || '';
+                
+                // Get the attribution
+                let attributionText = '';
+                if (prediction.attribution) {
+                    try {
+                        if (typeof prediction.attribution === 'string') {
+                            // Clean up the string if it has surrounding quotes
+                            const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                            const parsed = JSON.parse(cleanedAttr);
+                            attributionText = Array.isArray(parsed) ? parsed.join('; ') : String(parsed);
+                        } else if (Array.isArray(prediction.attribution)) {
+                            attributionText = prediction.attribution.join('; ');
+                        } else {
+                            attributionText = String(prediction.attribution);
+                        }
+                    } catch (e) {
+                        // If parsing fails, use as is
+                        attributionText = String(prediction.attribution);
+                    }
+                }
+                
+                // Find relevant notes
+                const predictionDate = prediction.note_date || prediction.prediction_timestamp;
+                let relevantNotes = [];
+                let noteTypes = [];
+                let combinedNoteText = '';
+                
+                if (predictionDate && prediction.encounter_id) {
+                    // Convert to date object for comparison
+                    const predDate = new Date(predictionDate);
+                    
+                    // Filter notes by encounter_id and date
+                    relevantNotes = notesData.filter(note => {
+                        // Match by encounter ID
+                        if (note.encounter_id !== prediction.encounter_id) return false;
+                        
+                        // If note has a date, check if it's before or equal to prediction date
+                        if (note.note_date) {
+                            const noteDate = new Date(note.note_date);
+                            return noteDate <= predDate;
+                        }
+                        
+                        // If no date to compare, include it anyway
+                        return true;
+                    });
+                    
+                    // Sort by date (oldest first) if dates are available
+                    relevantNotes.sort((a, b) => {
+                        if (a.note_date && b.note_date) {
+                            return new Date(a.note_date) - new Date(b.note_date);
+                        }
+                        return 0;
+                    });
+                    
+                    // Extract note text and types
+                    relevantNotes.forEach(note => {
+                        let noteText = '';
+                        const noteType = note.note_type || note.type || 'Clinical Note';
+                        
+                        // Extract text
+                        if (note.note_text) {
+                            noteText = note.note_text;
+                        } else if (note.text) {
+                            noteText = note.text;
+                        } else if (note.anonymized_text) {
+                            noteText = note.anonymized_text;
+                        } else {
+                            // If no dedicated text field, try to identify it
+                            for (const key in note) {
+                                if (typeof note[key] === 'string' && note[key].length > 200) {
+                                    noteText = note[key];
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Add to combined text with separator
+                        if (combinedNoteText) combinedNoteText += ' ||| ';
+                        combinedNoteText += noteText.replace(/,/g, ';').replace(/\n/g, ' ').replace(/"/g, '""');
+                        
+                        // Add note type
+                        noteTypes.push(noteType);
+                    });
+                }
+                
+                // Combine the note types
+                const combinedNoteTypes = noteTypes.join('; ');
+                
+                // Add row to CSV
+                csvRows.push([
+                    idx,
+                    predictionId,
+                    encounterId,
+                    `"${predictionText.replace(/"/g, '""')}"`,
+                    `"${attributionText.replace(/"/g, '""')}"`,
+                    `"${combinedNoteText}"`,
+                    `"${combinedNoteTypes}"`,
+                    result,
+                    typeof validation === 'string' ? '' : (validation.invalidReason || ''),
+                    `"${comment.replace(/"/g, '""')}"`,
+                    timestamp
+                ].join(','));
+            }
+            
+            const csvContent = csvRows.join('\n');
+            
+            // Create a blob and download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `clinical_validation_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Show status message
+            showStatus('Validation results saved as CSV.', 'success');
+        }
+
+        function updateValidationStatus() {
+            const validation = validationResults[currentIndex];
+            const result = typeof validation === 'string' ? validation : validation?.result;
+            
+            if (result) {
+                let statusText = result === 'valid' ? 'Valid Attribution' : 'Invalid Attribution';
+                
+                // Add invalid reason to status if available
+                if (result === 'invalid' && validation.invalidReason) {
+                    let reasonText = '';
+                    switch(validation.invalidReason) {
+                        case 'hallucination':
+                            reasonText = 'Hallucination';
+                            break;
+                        case 'invalid_clinical_reasoning':
+                            reasonText = 'Invalid Clinical Reasoning';
+                            break;
+                        case 'other':
+                            reasonText = 'Other';
+                            break;
+                        default:
+                            reasonText = validation.invalidReason;
+                    }
+                    statusText += ` - Reason: ${reasonText}`;
+                }
+                
+                validationStatus.textContent = statusText;
+                validationStatus.className = 'validation-status ' + (result === 'valid' ? 'success' : 'error');
+                validationStatus.style.display = 'block';
+            } else {
+                validationStatus.style.display = 'none';
+            }
+        }
+
+        // Search function
+        function searchNotes() {
+            const searchTerm = searchInput.value.trim();
+            
+            // Get the current note text
+            const noteTextElement = document.getElementById('noteText');
+            const originalText = noteTextElement.innerHTML;
+            
+            // Remove existing search highlights first but preserve attribution highlights
+            const cleanedText = originalText.replace(/<span class="search-match">([^<]+)<\/span>/g, '$1');
+            
+            if (!searchTerm) {
+                // If no search term, just restore the text without search highlights
+                noteTextElement.innerHTML = cleanedText;
+                return;
+            }
+            
+            try {
+                // Escape special regex characters in the search term
+                const escapedSearch = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escapedSearch})`, 'gi');
+                
+                // Highlight search matches, carefully handling spans that might already exist
+                let highlightedText = cleanedText;
+                
+                // Function to process text nodes only (not inside existing spans)
+                function replaceTextWithinNode(text) {
+                    return text.replace(regex, '<span class="search-match">$1</span>');
+                }
+                
+                // Create a temporary DOM element to apply complex replacements
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = cleanedText;
+                
+                // Process the DOM tree to find text nodes
+                const walk = document.createTreeWalker(
+                    tempDiv,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+                
+                const nodesToReplace = [];
+                let currentNode;
+                
+                // Collect nodes that need replacement
+                while (currentNode = walk.nextNode()) {
+                    if (regex.test(currentNode.nodeValue)) {
+                        nodesToReplace.push(currentNode);
+                    }
+                }
+                
+                // Apply replacements
+                nodesToReplace.forEach(node => {
+                    const newContent = replaceTextWithinNode(node.nodeValue);
+                    const newSpan = document.createElement('span');
+                    newSpan.innerHTML = newContent;
+                    node.parentNode.replaceChild(newSpan, node);
+                });
+                
+                // Get the processed HTML
+                highlightedText = tempDiv.innerHTML;
+                noteTextElement.innerHTML = highlightedText;
+                
+                // Count matches - this is approximate since we aren't just doing a simple replace now
+                const matchCount = nodesToReplace.length;
+                
+                if (matchCount > 0) {
+                    showStatus(`Found matches for "${searchTerm}"`, 'success');
+                    
+                    // Scroll to the first match
+                    const firstMatch = noteTextElement.querySelector('.search-match');
+                    if (firstMatch) {
+                        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    showStatus(`No matches found for "${searchTerm}"`, 'error');
+                }
+            } catch (e) {
+                // In case of invalid regex
+                showStatus(`Search error: ${e.message}`, 'error');
+                noteTextElement.innerHTML = cleanedText;
+            }
+        }
+
+        // Clear search function
+        function clearSearch() {
+            // Clear the search input
+            searchInput.value = '';
+            
+            // Call search with empty term to clear highlights
+            searchNotes();
+            
+            // Set focus back to the search input
+            searchInput.focus();
+            
+            // Show status message
+            showStatus('Search cleared', 'info');
+        }
     </script>
-</body>
+  </body>
 </html> 

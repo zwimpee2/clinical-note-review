@@ -149,6 +149,6 @@ print(f"- {os.path.basename(notes_output_path)}: Contains all notes with full de
 print(f"- {os.path.basename(simplified_output_path)}: Contains simplified notes for easier viewing")
 print(f"- {os.path.basename(metadata_output_path)}: Contains metadata about the encounters")
 print("\nYou can now use the CSV viewer HTML application:")
-print("1. Open docs/csv_viewer.html in your browser")
-print(f"2. Load '{simplified_output_path}' as the Notes CSV")
+print("1. Open csv_viewer.html in your browser")
+print(f"2. Load '{notes_output_path}' as the Notes CSV")
 print(f"3. Load '{predictions_output_path}' as the Predictions CSV")
