@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Notes and Predictions Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .file-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .file-input-group {
+            flex: 1;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .view-container {
+            display: flex;
+            gap: 20px;
+        }
+        .view-panel {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+            display: none; /* Hide table panels by default */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .details-panel {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+            display: none;
+        }
+        .button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .info {
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        #status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none;
+        }
+        /* New styles for combined view */
+        .combined-view {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            height: 70vh;
+        }
+        .combined-panel {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .note-text {
+            white-space: pre-wrap;
+            font-family: monospace;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+        .prediction-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f7fc;
+            border-radius: 4px;
+        }
+        .prediction-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .attribution-item {
+            background-color: #edf7ff;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .highlight {
+            background-color: #fffbd0;
+            padding: 2px;
+            border-radius: 2px;
+        }
+        .note-separator {
+            margin: 20px 0 15px 0;
+            border-top: 2px dashed #3498db;
+            padding: 8px 10px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #3498db;
+            border-radius: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clinical Notes and Predictions Viewer</h1>
+        
+        <div class="info">
+            <p>Upload your CSV files to view notes and predictions side-by-side. Click on rows to see detailed information.</p>
+        </div>
+
+        <div class="file-inputs">
+            <div class="file-input-group">
+                <h2>Notes CSV</h2>
+                <p>Upload the CSV file containing clinical notes.</p>
+                <input type="file" id="notesFile" accept=".csv">
+            </div>
+            <div class="file-input-group">
+                <h2>Predictions CSV</h2>
+                <p>Upload the CSV file containing prediction data.</p>
+                <input type="file" id="predictionsFile" accept=".csv">
+            </div>
+        </div>
+
+        <button id="processButton" class="button">Process Files</button>
+        <div id="status"></div>
+        <div id="loaderContainer" class="hidden"><div class="loader"></div> Processing...</div>
+
+        <div class="view-container" style="margin-top: 20px; display: none;">
+            <div class="view-panel" id="notesPanel">
+                <h2>Notes</h2>
+                <div id="notesContent"></div>
+            </div>
+            <div class="view-panel" id="predictionsPanel">
+                <h2>Predictions</h2>
+                <div id="predictionsContent"></div>
+            </div>
+        </div>
+
+        <div class="details-panel" id="detailsPanel">
+            <div class="nav-buttons">
+                <button id="prevDetail" class="button">Previous</button>
+                <span id="predictionCounter" style="margin: 0 10px; line-height: 38px;"></span>
+                <button id="nextDetail" class="button">Next</button>
+            </div>
+            
+            <div class="combined-view">
+                <div class="combined-panel">
+                    <h2>Clinical Notes</h2>
+                    <div id="noteMetadata"></div>
+                    <div id="noteText" class="note-text"></div>
+                </div>
+                <div class="combined-panel">
+                    <h2>Prediction Details</h2>
+                    <div id="predictionInfo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Main variables to store the parsed CSV data
+        let notesData = [];
+        let predictionsData = [];
+        let currentIndex = 0;
+        
+        // Elements
+        const notesFileInput = document.getElementById('notesFile');
+        const predictionsFileInput = document.getElementById('predictionsFile');
+        const processButton = document.getElementById('processButton');
+        const statusDiv = document.getElementById('status');
+        const loaderContainer = document.getElementById('loaderContainer');
+        const notesContent = document.getElementById('notesContent');
+        const predictionsContent = document.getElementById('predictionsContent');
+        const detailsPanel = document.getElementById('detailsPanel');
+        const noteMetadata = document.getElementById('noteMetadata');
+        const noteText = document.getElementById('noteText');
+        const predictionInfo = document.getElementById('predictionInfo');
+        const prevDetailButton = document.getElementById('prevDetail');
+        const nextDetailButton = document.getElementById('nextDetail');
+
+        // Event listeners
+        processButton.addEventListener('click', processFiles);
+        prevDetailButton.addEventListener('click', showPreviousDetail);
+        nextDetailButton.addEventListener('click', showNextDetail);
+
+        // Function to parse CSV files
+        function parseCSV(text) {
+            // Basic CSV parsing - handles quoted values and commas within quotes
+            const result = [];
+            const lines = text.split('\n');
+            
+            // Extract headers
+            const headers = parseCSVLine(lines[0]);
+            
+            // Process each line
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                const values = parseCSVLine(lines[i]);
+                const row = {};
+                
+                for (let j = 0; j < headers.length; j++) {
+                    row[headers[j]] = values[j] || '';
+                }
+                
+                result.push(row);
+            }
+            
+            return result;
+        }
+        
+        // Helper function to parse a CSV line
+        function parseCSVLine(line) {
+            const result = [];
+            let inQuotes = false;
+            let currentValue = '';
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(currentValue);
+                    currentValue = '';
+                } else {
+                    currentValue += char;
+                }
+            }
+            
+            // Add the last value
+            result.push(currentValue);
+            
+            return result;
+        }
+
+        // Process the uploaded files
+        function processFiles() {
+            // Check if both files are selected
+            if (!notesFileInput.files[0] || !predictionsFileInput.files[0]) {
+                showStatus('Please select both CSV files.', 'error');
+                return;
+            }
+
+            // Show loader
+            loaderContainer.classList.remove('hidden');
+            showStatus('', '');
+
+            // Read notes file
+            const notesReader = new FileReader();
+            notesReader.onload = function(event) {
+                try {
+                    notesData = parseCSV(event.target.result);
+                    
+                    // Read predictions file once notes file is read
+                    const predictionsReader = new FileReader();
+                    predictionsReader.onload = function(event) {
+                        try {
+                            predictionsData = parseCSV(event.target.result);
+                            displayData();
+                            loaderContainer.classList.add('hidden');
+                            showStatus('Files processed successfully.', 'success');
+                        } catch (error) {
+                            loaderContainer.classList.add('hidden');
+                            showStatus('Error parsing predictions file: ' + error.message, 'error');
+                        }
+                    };
+                    predictionsReader.readAsText(predictionsFileInput.files[0]);
+                    
+                } catch (error) {
+                    loaderContainer.classList.add('hidden');
+                    showStatus('Error parsing notes file: ' + error.message, 'error');
+                }
+            };
+            notesReader.readAsText(notesFileInput.files[0]);
+        }
+
+        // Display the parsed data
+        function displayData() {
+            // Hide these displays since we're going directly to the detailed view
+            // displayTable(notesData, notesContent, 'notes-table', showNoteDetails);
+            // displayTable(predictionsData, predictionsContent, 'predictions-table', showPredictionDetails);
+            
+            // If we have predictions, show the first one immediately
+            if (predictionsData && predictionsData.length > 0) {
+                // Show the details panel directly
+                detailsPanel.style.display = 'block';
+                showPredictionDetails(0);
+                
+                // Update counter
+                updatePredictionCounter(0);
+            } else {
+                showStatus('No predictions found in the file.', 'error');
+            }
+        }
+
+        // Helper function to create and display a table
+        function displayTable(data, container, tableId, rowClickHandler) {
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p>No data available.</p>';
+                return;
+            }
+
+            // Create table
+            const table = document.createElement('table');
+            table.id = tableId;
+            
+            // Create header row
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            // Get all headers from the first row
+            const headers = Object.keys(data[0]);
+            
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // Create table body with data rows
+            const tbody = document.createElement('tbody');
+            
+            data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.dataset.index = index;
+                
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    
+                    // Truncate long text for better display
+                    const text = row[header] || '';
+                    td.textContent = text.length > 100 ? text.substring(0, 100) + '...' : text;
+                    
+                    tr.appendChild(td);
+                });
+                
+                // Add click event to show details
+                tr.addEventListener('click', () => rowClickHandler(index));
+                
+                tbody.appendChild(tr);
+            });
+            
+            table.appendChild(tbody);
+            
+            // Add table to container
+            container.innerHTML = '';
+            container.appendChild(table);
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+        }
+
+        // Show note details
+        function showNoteDetails(index) {
+            const note = notesData[index];
+            if (!note) return;
+            
+            currentIndex = index;
+            
+            // Update navigation buttons
+            prevDetailButton.disabled = index === 0;
+            nextDetailButton.disabled = index === notesData.length - 1;
+            
+            // Metadata section
+            let metadataHtml = '<div style="margin-bottom: 15px;">';
+            
+            // Add key metadata fields
+            for (const key in note) {
+                if (['note_text', 'text', 'content'].includes(key)) continue; // Skip the actual note text
+                metadataHtml += `<div><strong>${key}:</strong> ${note[key]}</div>`;
+            }
+            metadataHtml += '</div>';
+            noteMetadata.innerHTML = metadataHtml;
+            
+            // Note text section
+            let textContent = '';
+            if (note.note_text) {
+                textContent = note.note_text;
+            } else if (note.text) {
+                textContent = note.text;
+            } else {
+                // If no dedicated text field, try to identify it
+                for (const key in note) {
+                    if (typeof note[key] === 'string' && note[key].length > 200) {
+                        textContent = note[key];
+                        break;
+                    }
+                }
+            }
+            noteText.innerHTML = textContent;
+            
+            // Try to find matching prediction based on encounter_id
+            const matchingPredictions = predictionsData.filter(pred => 
+                pred.encounter_id === note.encounter_id);
+            
+            if (matchingPredictions.length > 0) {
+                let predHtml = '';
+                
+                matchingPredictions.forEach(pred => {
+                    predHtml += `<div class="prediction-info">`;
+                    predHtml += `<div class="prediction-title">Prediction: ${pred.prediction}</div>`;
+                    
+                    // Add prediction details
+                    if (pred.confidence) {
+                        predHtml += `<div><strong>Confidence:</strong> ${pred.confidence}</div>`;
+                    }
+                    
+                    if (pred.ground_truth) {
+                        predHtml += `<div><strong>Ground Truth:</strong> ${pred.ground_truth}</div>`;
+                        predHtml += `<div><strong>Correct:</strong> ${pred.prediction === pred.ground_truth ? 'Yes' : 'No'}</div>`;
+                    }
+                    
+                    if (pred.note_date) {
+                        predHtml += `<div><strong>Note Date:</strong> ${pred.note_date}</div>`;
+                    }
+                    
+                    if (pred.prediction_timestamp) {
+                        predHtml += `<div><strong>Prediction Time:</strong> ${pred.prediction_timestamp}</div>`;
+                    }
+                    
+                    // Process attribution if available
+                    if (pred.attribution) {
+                        let attributionItems = [];
+                        
+                        // Try to parse attribution if it's a JSON string
+                        try {
+                            if (typeof pred.attribution === 'string') {
+                                // Clean up the string if it has surrounding quotes
+                                const cleanedAttr = pred.attribution.replace(/^"|"$/g, '');
+                                attributionItems = JSON.parse(cleanedAttr);
+                            } else if (Array.isArray(pred.attribution)) {
+                                attributionItems = pred.attribution;
+                            }
+                        } catch (e) {
+                            // If parsing fails, use as is
+                            attributionItems = [pred.attribution];
+                        }
+                        
+                        predHtml += `<div><strong>Attribution:</strong></div>`;
+                        predHtml += `<div>`;
+                        
+                        if (Array.isArray(attributionItems)) {
+                            attributionItems.forEach(item => {
+                                predHtml += `<span class="attribution-item">${item}</span>`;
+                                
+                                // Highlight this term in the note text
+                                if (item && textContent) {
+                                    const regex = new RegExp(`(${item})`, 'gi');
+                                    textContent = textContent.replace(regex, '<span class="highlight">$1</span>');
+                                    noteText.innerHTML = textContent;
+                                }
+                            });
+                        } else {
+                            predHtml += `<span class="attribution-item">${attributionItems}</span>`;
+                        }
+                        
+                        predHtml += `</div>`;
+                    }
+                    
+                    predHtml += `</div>`;
+                });
+                
+                predictionInfo.innerHTML = predHtml;
+            } else {
+                predictionInfo.innerHTML = '<p>No matching predictions found for this note.</p>';
+            }
+            
+            detailsPanel.style.display = 'block';
+        }
+
+        // Show prediction details
+        function showPredictionDetails(index) {
+            const prediction = predictionsData[index];
+            if (!prediction) return;
+            
+            currentIndex = index;
+            
+            // Update navigation buttons
+            prevDetailButton.disabled = index === 0;
+            nextDetailButton.disabled = index === predictionsData.length - 1;
+            
+            // Update counter
+            updatePredictionCounter(index);
+            
+            let predHtml = `<div class="prediction-info">`;
+            predHtml += `<div class="prediction-title">Prediction: ${prediction.prediction}</div>`;
+            
+            // Add all prediction fields
+            for (const key in prediction) {
+                if (key === 'prediction') continue; // Already displayed
+                
+                if (key === 'attribution') {
+                    let attributionItems = [];
+                    
+                    // Try to parse attribution if it's a JSON string
+                    try {
+                        if (typeof prediction.attribution === 'string') {
+                            // Clean up the string if it has surrounding quotes
+                            const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                            attributionItems = JSON.parse(cleanedAttr);
+                        } else if (Array.isArray(prediction.attribution)) {
+                            attributionItems = prediction.attribution;
+                        }
+                    } catch (e) {
+                        // If parsing fails, use as is
+                        attributionItems = [prediction.attribution];
+                    }
+                    
+                    predHtml += `<div><strong>Attribution:</strong></div>`;
+                    predHtml += `<div>`;
+                    
+                    if (Array.isArray(attributionItems)) {
+                        attributionItems.forEach(item => {
+                            predHtml += `<span class="attribution-item">${item}</span>`;
+                        });
+                    } else {
+                        predHtml += `<span class="attribution-item">${attributionItems}</span>`;
+                    }
+                    
+                    predHtml += `</div>`;
+                } else {
+                    predHtml += `<div><strong>${key}:</strong> ${prediction[key]}</div>`;
+                }
+            }
+            
+            predHtml += `</div>`;
+            predictionInfo.innerHTML = predHtml;
+            
+            // Find all matching notes up to the prediction date
+            const predictionDate = prediction.note_date || prediction.prediction_timestamp;
+            let relevantNotes = [];
+            
+            if (predictionDate && prediction.encounter_id) {
+                // Convert to date object for comparison
+                const predDate = new Date(predictionDate);
+                
+                // Filter notes by encounter_id and date
+                relevantNotes = notesData.filter(note => {
+                    // Match by encounter ID
+                    if (note.encounter_id !== prediction.encounter_id) return false;
+                    
+                    // If note has a date, check if it's before or equal to prediction date
+                    if (note.note_date) {
+                        const noteDate = new Date(note.note_date);
+                        return noteDate <= predDate;
+                    }
+                    
+                    // If no date to compare, include it anyway
+                    return true;
+                });
+                
+                // Sort by date (oldest first) if dates are available
+                relevantNotes.sort((a, b) => {
+                    if (a.note_date && b.note_date) {
+                        return new Date(a.note_date) - new Date(b.note_date);
+                    }
+                    return 0;
+                });
+            }
+            
+            if (relevantNotes.length > 0) {
+                // Combine all notes into one text block with separators
+                let combinedText = '';
+                
+                relevantNotes.forEach((note, i) => {
+                    // Extract text content from note
+                    let noteText = '';
+                    if (note.note_text) {
+                        noteText = note.note_text;
+                    } else if (note.text) {
+                        noteText = note.text;
+                    } else if (note.anonymized_text) {
+                        noteText = note.anonymized_text;
+                    } else {
+                        // If no dedicated text field, try to identify it
+                        for (const key in note) {
+                            if (typeof note[key] === 'string' && note[key].length > 200) {
+                                noteText = note[key];
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Add separator between notes
+                    if (i > 0) {
+                        combinedText += `<div class="note-separator">--- Note ${i+1} (${note.note_date || 'No date'}) ---</div>`;
+                    } else {
+                        combinedText += `<div class="note-separator">--- Note ${i+1} (${note.note_date || 'No date'}) ---</div>`;
+                    }
+                    
+                    combinedText += noteText;
+                });
+                
+                // Highlight attribution terms in the combined note text
+                if (prediction.attribution) {
+                    let attributionItems = [];
+                    
+                    try {
+                        if (typeof prediction.attribution === 'string') {
+                            // Clean up the string if it has surrounding quotes
+                            const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                            attributionItems = JSON.parse(cleanedAttr);
+                        } else if (Array.isArray(prediction.attribution)) {
+                            attributionItems = prediction.attribution;
+                        }
+                    } catch (e) {
+                        // If parsing fails, use as is
+                        attributionItems = [prediction.attribution];
+                    }
+                    
+                    if (Array.isArray(attributionItems)) {
+                        attributionItems.forEach(item => {
+                            if (item && combinedText) {
+                                try {
+                                    const regex = new RegExp(`(${item})`, 'gi');
+                                    combinedText = combinedText.replace(regex, '<span class="highlight">$1</span>');
+                                } catch (e) {
+                                    // Skip invalid regex patterns
+                                    console.log("Error highlighting term:", item);
+                                }
+                            }
+                        });
+                    }
+                }
+                
+                noteText.innerHTML = combinedText;
+                noteMetadata.innerHTML = ''; // Clear metadata since we now show dates within the notes
+            } else {
+                noteText.innerHTML = '<p>No matching notes found for this prediction.</p>';
+                noteMetadata.innerHTML = '';
+            }
+            
+            detailsPanel.style.display = 'block';
+        }
+        
+        // Show previous detail
+        function showPreviousDetail() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showPredictionDetails(currentIndex);
+            }
+        }
+        
+        // Show next detail
+        function showNextDetail() {
+            const maxIndex = predictionsData.length - 1;
+            
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                showPredictionDetails(currentIndex);
+            }
+        }
+        
+        // Update the prediction counter
+        function updatePredictionCounter(index) {
+            const counterElement = document.getElementById('predictionCounter');
+            counterElement.textContent = `Prediction ${index + 1} of ${predictionsData.length}`;
+        }
+    </script>
+</body>
+</html> 
