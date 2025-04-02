@@ -921,6 +921,40 @@
             for (const key in prediction) {
                 if (key === 'prediction') continue; // Already displayed
                 
+                // Special handling for note_date to add relative day
+                if (key === 'note_date' && prediction.note_date && prediction.encounter_start) {
+                    const noteDateObj = new Date(prediction.note_date);
+                    const encounterStartObj = new Date(prediction.encounter_start);
+                    
+                    // Calculate difference in days
+                    const diffTime = Math.abs(noteDateObj - encounterStartObj);
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    predHtml += `<div><strong>${key}:</strong> ${prediction[key]} (Day ${diffDays})</div>`;
+                    continue;
+                }
+                
+                if (key === 'note_date' && prediction.note_date) {
+                    // Find encounter start date from various possible field names
+                    const encounterStartDate = prediction.encounter_start || prediction.admission_date || 
+                                              prediction.start_date || prediction.encounter_starttime;
+                    
+                    if (encounterStartDate) {
+                        const noteDateObj = new Date(prediction.note_date);
+                        const encounterStartObj = new Date(encounterStartDate);
+                        
+                        // Calculate difference in days
+                        const diffTime = Math.abs(noteDateObj - encounterStartObj);
+                        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                        
+                        predHtml += `<div><strong>${key}:</strong> ${prediction[key]} (Day ${diffDays})</div>`;
+                    } else {
+                        // Fall back to regular display if no start date is available
+                        predHtml += `<div><strong>${key}:</strong> ${prediction[key]}</div>`;
+                    }
+                    continue;
+                }
+                
                 if (key === 'attribution') {
                     let attributionItems = [];
                     
@@ -1018,8 +1052,27 @@
                     const noteType = note.note_type || note.type || 'Clinical Note';
                     const noteDate = note.note_date || note.timestamp || 'No date';
                     
-                    // Add separator between notes with note type and date
-                    combinedText += `<div class="note-separator">${noteType} - ${noteDate}</div>`;
+                    // Calculate days since admission if possible
+                    let daysSinceAdmission = '';
+                    if (noteDate) {
+                        // Find the encounter start date using various possible field names
+                        const encounterStartDate = prediction.encounter_start || prediction.admission_date || 
+                                                  prediction.start_date || prediction.encounter_starttime;
+                        
+                        if (encounterStartDate) {
+                            const noteDateObj = new Date(noteDate);
+                            const encounterStartObj = new Date(encounterStartDate);
+                            
+                            // Calculate difference in days (ignoring time)
+                            const diffTime = Math.abs(noteDateObj - encounterStartObj);
+                            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                            
+                            daysSinceAdmission = ` (Day ${diffDays})`;
+                        }
+                    }
+                    
+                    // Add separator between notes with note type, date, and relative day
+                    combinedText += `<div class="note-separator">${noteType} - ${noteDate}${daysSinceAdmission}</div>`;
                     
                     // Format the note text with Epic-style formatting
                     const formattedText = formatEpicStyleNote(noteText);
