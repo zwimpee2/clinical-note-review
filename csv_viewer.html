@@ -150,7 +150,7 @@
         }
         /* Adjust panel ratios */
         .notes-panel {
-            flex: 2; /* Make notes panel twice as wide */
+            flex: 1.5; /* Make notes panel wider */
         }
         .predictions-panel {
             flex: 1; /* Keep predictions panel standard size */
@@ -331,6 +331,31 @@
             padding: 2px;
             border-radius: 2px;
         }
+        /* Version filter styles */
+        .version-filter {
+            margin: 10px 0 15px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .version-filter select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            min-width: 180px;
+            font-family: inherit;
+        }
+        
+        .version-filter span {
+            font-weight: bold;
+            color: #2c3e50;
+        }
         /* Attribution highlighting colors */
         .highlight-0 { background-color: #fffbd0; }
         .highlight-1 { background-color: #d4f9d7; }
@@ -378,6 +403,215 @@
             background-color: #bdbdbd;
             cursor: not-allowed;
         }
+        
+        /* Version comparison styles */
+        .version-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .version-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 4px 4px 0 0;
+            background-color: #f5f5f5;
+        }
+        
+        .version-tab.active {
+            background-color: #fff;
+            border-bottom: 2px solid #fff;
+            margin-bottom: -1px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .version-content {
+            display: none;
+        }
+        
+        .version-content.active {
+            display: block;
+        }
+        
+        .compare-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .compare-item {
+            flex: 1 1 calc(50% - 15px);
+            min-width: 280px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        
+        .prediction-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .model-info {
+            padding: 5px 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .raw-prediction {
+            background-color: #f0f7fc;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 3px solid #81d4fa;
+        }
+        
+        .final-prediction {
+            background-color: #f1f8e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 3px solid #aed581;
+        }
+        
+        .prediction-match {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .prediction-mismatch {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .ranking-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f7f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .ranking-instructions {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .rank-list {
+            margin-bottom: 20px;
+        }
+        
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: move;
+        }
+        
+        .rank-item.dragging {
+            opacity: 0.5;
+            background-color: #f0f0f0;
+        }
+        
+        .rank-handle {
+            margin-right: 10px;
+            color: #9e9e9e;
+            cursor: grab;
+        }
+        
+        .rank-content {
+            flex: 1;
+        }
+        
+        .rank-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .rank-prediction {
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        .ranking-comment {
+            margin-top: 15px;
+        }
+
+        /* New styles for multi-column comparison row */
+        .multi-column-comparison {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef; /* Light background for the row */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex-wrap: wrap; /* Allow wrapping if too many columns */
+        }
+
+        .comparison-column {
+            flex: 1 1 300px; /* Flex basis of 300px, allow grow/shrink */
+            min-width: 280px; /* Minimum width before wrapping */
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            /* Remove fixed height and overflow */
+            /* max-height: 250px; */ /* REMOVED */
+            /* overflow-y: auto; */ /* REMOVED */
+        }
+
+        .comparison-column h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #343a40;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            font-size: 1.1em;
+            position: sticky; /* Keep header visible when scrolling */
+            top: 0;
+            background-color: #fff; /* Ensure header bg covers scrolled content */
+            z-index: 1;
+        }
+
+        .comparison-column p {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .comparison-column strong {
+             color: #495057;
+        }
+
+        .comparison-column .attribution-list {
+            margin-top: 10px;
+            padding-left: 0; /* Remove default list padding */
+            list-style: none; /* Remove default list bullets */
+        }
+
+        .comparison-column .attribution-list li {
+            background-color: #f8f9fa;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            border-left: 3px solid #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -386,16 +620,6 @@
         
         <div class="info">
             <p>Upload your CSV files to view notes and predictions side-by-side. Review attribution evidence in clinical notes and validate predictions.</p>
-            <div style="margin-top: 10px; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">
-                <strong>Keyboard Shortcuts:</strong>
-                <ul style="margin: 5px 0 0 20px; padding: 0;">
-                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">→</span> Next prediction</li>
-                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">←</span> Previous prediction</li>
-                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">V</span> Mark as Valid</li>
-                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">X</span> Mark as Invalid</li>
-                    <li><span style="font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px;">Ctrl+S</span> Save Results</li>
-                </ul>
-            </div>
         </div>
 
         <div class="file-inputs">
@@ -411,28 +635,34 @@
             </div>
         </div>
 
+        <!-- Re-insert Process Button, Status, Loader -->
         <button id="processButton" class="button">Process Files</button>
         <div id="status"></div>
         <div id="loaderContainer" class="hidden"><div class="loader"></div> Processing...</div>
 
-        <div class="view-container" style="margin-top: 20px; display: none;">
-            <div class="view-panel" id="notesPanel">
-                <h2>Notes</h2>
-                <div id="notesContent"></div>
-            </div>
-            <div class="view-panel" id="predictionsPanel">
-                <h2>Predictions</h2>
-                <div id="predictionsContent"></div>
-            </div>
-        </div>
+        <div class="version-filter">
+           <span>Filter by: </span>
+           <!-- Replace single selects with a multi-select list -->
+           <select id="versionKeyFilter" multiple size="5" style="min-width: 300px; height: 100px; vertical-align: middle;">
+               <!-- Options (version_key combinations) will be populated dynamically -->
+           </select>
+            <span style="margin-left: 10px; font-size: 0.9em; color: #555;">(Select up to 3 versions, Cmd/Ctrl+click)</span>
+           <button id="applyFilterButton" class="button" style="margin-left: 10px;">Apply Filter</button>
+           <button id="clearFilterButton" class="button" style="background-color: #95a5a6;">Clear</button>
+       </div>
 
+        <!-- Restore the main details panel structure -->
         <div class="details-panel" id="detailsPanel">
-            <div class="nav-buttons">
-                <button id="prevDetail" class="button">Previous</button>
-                <span id="predictionCounter" style="margin: 0 10px; line-height: 38px;"></span>
-                <button id="nextDetail" class="button">Next</button>
-            </div>
-            
+            <!-- Restore Nav buttons and Filters if they were removed -->
+             <div class="nav-buttons">
+                 <button id="prevDetail" class="button">Previous</button>
+                 <span id="predictionCounter" style="margin: 0 10px; line-height: 38px;"></span>
+                 <button id="nextDetail" class="button">Next</button>
+             </div>
+
+             <!-- REMOVED version filter from here -->
+
+            <!-- Restore the two-column combined view -->
             <div class="combined-view">
                 <div class="combined-panel notes-panel">
                     <h2>Clinical Notes</h2>
@@ -446,7 +676,11 @@
                 </div>
                 <div class="combined-panel predictions-panel">
                     <h2>Prediction Details</h2>
+                    <div id="versionTabs" class="version-tabs">
+                        <!-- Version tabs will be dynamically added here -->
+                    </div>
                     <div id="predictionInfo"></div>
+                    <!-- Validation Controls correctly placed inside predictions panel -->
                     <div class="validation-controls">
                         <div class="validation-title">Clinical Validation</div>
                         <div>
@@ -483,6 +717,19 @@
                 </div>
             </div>
         </div>
+
+        <!-- New Row for Multi-Column Comparison -->
+        <div id="multiColumnComparison" class="multi-column-comparison" style="display: none;">
+            <!-- Content will be dynamically added here -->
+        </div>
+
+        <!-- Moved Ranking Controls Below Comparison Row -->
+        <div class="ranking-controls" style="display: none;">
+            <div class="validation-title">Compare and Rank Model Versions</div>
+            <div id="rankingContainer">
+                <!-- Ranking UI will be dynamically added here -->
+            </div>
+        </div>
     </div>
 
     <script>
@@ -490,6 +737,11 @@
         let notesData = [];
         let predictionsData = [];
         let currentIndex = 0;
+        let currentEncounterId = null;
+        let currentNoteDate = null;
+        let versionPredictions = {}; // Store predictions by version for comparison
+        let versionKeys = []; // List of all version keys
+        let currentVersionKey = null; // Currently selected version tab
         
         // Elements
         const notesFileInput = document.getElementById('notesFile');
@@ -526,6 +778,43 @@
 
         // Data object to store validation results
         const validationResults = {};
+        
+        // Model version information mapping
+        const MODEL_VERSION_INFO = {
+            "0.1.0-prod": {
+                name: "GPT-4o",
+                description: "Production GPT-4o endpoint",
+                variant: "standard"
+            },
+            "0.2.0-stage": {
+                name: "GPT-4o",
+                description: "Staging GPT-4o endpoint",
+                variant: "standard"
+            },
+            "0.3.0-stage": {
+                name: "GPT-4.1",
+                description: "GPT-4.1 standard endpoint",
+                variant: "standard"
+            },
+            "0.4.0-stage": {
+                name: "GPT-4.1-mini",
+                description: "GPT-4.1 mini endpoint (smaller model)",
+                variant: "mini"
+            },
+            "0.5.0-stage": {
+                name: "GPT-4.1-nano",
+                description: "GPT-4.1 nano endpoint (smallest model)",
+                variant: "nano"
+            }
+        };
+        
+        // Prompt version information mapping
+        const PROMPT_VERSION_INFO = {
+            "1.0.0": "Original production prompt",
+            "1.1.0": "Enhanced staging prompt",
+            "1.2.0": "Improved staging prompt with more context handling",
+            "1.3.0": "Latest prompt with optimized instructions and context"
+        };
 
         // Event listeners
         processButton.addEventListener('click', processFiles);
@@ -563,6 +852,229 @@
                 e.preventDefault();
             }
         });
+        
+        // Version filter elements
+        // const modelVersionFilter = document.getElementById('modelVersionFilter'); // Removed
+        // const promptVersionFilter = document.getElementById('promptVersionFilter'); // Removed
+        const versionKeyFilter = document.getElementById('versionKeyFilter'); // New multi-select
+        const applyFilterButton = document.getElementById('applyFilterButton');
+        const clearFilterButton = document.getElementById('clearFilterButton');
+        
+        // Variables to track filtering state
+        // let filteredModelVersion = ''; // Removed
+        // let filteredPromptVersion = ''; // Removed
+        let selectedVersionKeys = []; // New state for selected version keys
+        
+        // Add filter event listeners
+        applyFilterButton.addEventListener('click', applyVersionFilter);
+        clearFilterButton.addEventListener('click', clearVersionFilter);
+        
+        // Function to populate version filter dropdowns
+        function populateVersionFilters() {
+            // Clear previous options except the default one
+            // modelVersionFilter.innerHTML = '<option value="">All Model Versions</option>'; // Removed
+            // promptVersionFilter.innerHTML = '<option value="">All Prompt Versions</option>'; // Removed
+            versionKeyFilter.innerHTML = ''; // Clear multi-select
+            
+            // Create sets of unique versions
+            // const modelVersions = new Set(); // Not needed directly for filter population anymore
+            // const promptVersions = new Set(); // Not needed directly for filter population anymore
+            const uniqueVersionKeys = new Map(); // Use a map to store info alongside the key
+            
+            // Extract unique version keys and associated info
+            predictionsData.forEach(prediction => {
+                const vKey = prediction.version_key;
+                if (vKey && !uniqueVersionKeys.has(vKey)) {
+                    uniqueVersionKeys.set(vKey, {
+                         model_version: prediction.model_version || 'unknown',
+                         prompt_version: prediction.prompt_version || 'unknown'
+                     });
+                }
+                /* // Original logic for separate filters:
+                if (prediction.model_version) {
+                    modelVersions.add(prediction.model_version);
+                }
+                if (prediction.prompt_version) {
+                    promptVersions.add(prediction.prompt_version);
+                }
+                */
+            });
+            
+            // Add version key options to the multi-select list
+            const sortedVersionKeys = Array.from(uniqueVersionKeys.keys()).sort();
+            sortedVersionKeys.forEach(vKey => {
+                const versionInfo = uniqueVersionKeys.get(vKey);
+                // const modelInfo = MODEL_VERSION_INFO[versionInfo.model_version] || { name: versionInfo.model_version, variant: "unknown" }; // REMOVED model name lookup
+                const promptInfo = PROMPT_VERSION_INFO[versionInfo.prompt_version] || "Unknown prompt";
+
+                const option = document.createElement('option');
+                option.value = vKey;
+
+                // Construct label without model name
+                let label = `${versionInfo.model_version} / v${versionInfo.prompt_version} (${promptInfo})`;
+                // Example of how to add variant back if needed, without the model name itself:
+                // const modelVariant = MODEL_VERSION_INFO[versionInfo.model_version]?.variant;
+                // if (modelVariant && modelVariant !== "standard") {
+                //     label = `${versionInfo.model_version} ${modelVariant} / v${versionInfo.prompt_version} (${promptInfo})`;
+                // }
+
+                option.textContent = label;
+                option.title = vKey; // Tooltip with raw key
+
+                versionKeyFilter.appendChild(option);
+            });
+        }
+        
+        // Function to apply version filters
+        function applyVersionFilter() {
+            // Get selected version keys from the multi-select list
+            selectedVersionKeys = Array.from(versionKeyFilter.selectedOptions).map(option => option.value);
+
+            if (selectedVersionKeys.length === 0) {
+                showStatus('No versions selected.', 'error');
+                return;
+            }
+
+            // --- Limit to 3 selections --- 
+            if (selectedVersionKeys.length > 3) {
+                showStatus('Please select a maximum of 3 versions to compare.', 'error');
+                // Optionally, visually deselect the extra ones in the list, or just prevent action
+                return; 
+            }
+            // --- End Limit --- 
+
+            // Get filtered predictions (just the indices)
+            getFilteredPredictions(); // This updates filteredPredictionIndices
+
+            if (filteredPredictionIndices.length === 0) {
+                showStatus('No predictions match the selected versions.', 'error');
+                return;
+            }
+
+            // Navigate to the first filtered prediction
+            // The navigateToFilteredPrediction function will handle setting the correct active tab
+            navigateToFilteredPrediction(0);
+
+            // Show status
+            const filterDesc = [];
+            selectedVersionKeys.forEach(vKey => {
+                filterDesc.push(`version=${vKey}`);
+            });
+            
+            showStatus(
+                `Filtered to ${filteredPredictionIndices.length} predictions matching ${filterDesc.join(', ')}. 
+                ${nextFilteredIndex > 0 ? 'Use navigation buttons to view more matches.' : ''}`, 
+                'success'
+            );
+        }
+        
+        // Clear the version filters
+        function clearVersionFilter() {
+            // modelVersionFilter.value = ''; // Removed
+            // promptVersionFilter.value = ''; // Removed
+            // filteredModelVersion = ''; // Removed
+            // filteredPromptVersion = ''; // Removed
+            versionKeyFilter.selectedIndex = -1; // Deselect all options
+            selectedVersionKeys = []; // Clear selected keys state
+
+            // Explicitly hide comparison and ranking sections when filter is cleared
+            const comparisonRow = document.getElementById('multiColumnComparison');
+            if (comparisonRow) comparisonRow.style.display = 'none';
+            const rankingControls = document.querySelector('.ranking-controls');
+            if (rankingControls) rankingControls.style.display = 'none';
+
+            // Reset to first prediction (using the default index array)
+            navigateToPrediction(0);
+            
+            // Show status
+            showStatus('Filters cleared. Showing all predictions.', 'success');
+        }
+        
+        // Variables to track filtered navigation
+        let filteredPredictionIndices = [];
+        let currentFilteredIndex = 0;
+        let nextFilteredIndex = 0;
+        
+        // Get predictions matching the current filters
+        function getFilteredPredictions() {
+            // Reset indices
+            filteredPredictionIndices = [];
+            currentFilteredIndex = 0;
+            
+            // Create a unique key map to avoid duplicates
+            const uniqueKeys = new Map();
+            
+            // Filter predictions
+            predictionsData.forEach((prediction, index) => {
+                const matchesModelFilter = selectedVersionKeys.length === 0 || selectedVersionKeys.some(vKey => prediction.version_key === vKey);
+                
+                if (matchesModelFilter) {
+                    // Use encounter_id and note_date as unique key
+                    const uniqueKey = `${prediction.encounter_id}_${prediction.note_date}`;
+                    
+                    // Only add first match for each unique key
+                    if (!uniqueKeys.has(uniqueKey)) {
+                        uniqueKeys.set(uniqueKey, true);
+                        filteredPredictionIndices.push(index);
+                    }
+                }
+            });
+            
+            return filteredPredictionIndices;
+        }
+        
+        // Navigate to a filtered prediction by index
+        function navigateToFilteredPrediction(filteredIndex) {
+            if (filteredPredictionIndices.length === 0 || filteredIndex < 0 || filteredIndex >= filteredPredictionIndices.length) {
+                return;
+            }
+
+            currentFilteredIndex = filteredIndex;
+            const predictionIndex = filteredPredictionIndices[filteredIndex];
+
+            // Navigate to the prediction
+            currentIndex = predictionIndex;
+
+            // Update navigation buttons for filtered navigation
+            prevDetailButton.disabled = filteredIndex === 0;
+            nextDetailButton.disabled = filteredIndex === filteredPredictionIndices.length - 1;
+
+            // Update counter
+            document.getElementById('predictionCounter').textContent =
+                `Filtered: ${filteredIndex + 1} of ${filteredPredictionIndices.length}`;
+
+            // Update filtered navigation index for next/prev functions
+            nextFilteredIndex = filteredIndex;
+
+            // Fetch the prediction and display it
+            const prediction = predictionsData[predictionIndex];
+            if (!prediction) {
+                console.error("Navigation failed: No prediction at index", predictionIndex);
+                return;
+            }
+
+            // Group predictions by version (this updates global versionKeys for the current item)
+            groupPredictionsByVersion(predictionIndex);
+
+            // IMPORTANT: Set the active tab to the FIRST selected version key
+            // Ensure this key exists in the versions available for *this specific* prediction item
+            if (selectedVersionKeys.length > 0) {
+                 const firstSelectedKey = selectedVersionKeys[0];
+                 if (versionPredictions[firstSelectedKey]) {
+                     currentVersionKey = firstSelectedKey;
+                 } else {
+                      // Fallback if the first selected key isn't available for this prediction (shouldn't happen with current logic, but safe)
+                      currentVersionKey = versionKeys.length > 0 ? versionKeys[0] : null;
+                 }
+             } else {
+                 // Fallback if somehow called without selected keys (e.g., initial load before filter)
+                 currentVersionKey = versionKeys.length > 0 ? versionKeys[0] : null;
+             }
+
+            // Render version tabs and show details (renderVersionTabs will now respect the filter)
+            renderVersionTabs();
+            displayPredictionDetails(prediction);
+        }
 
         // Function to parse CSV files
         function parseCSV(text) {
@@ -637,9 +1149,37 @@
                     predictionsReader.onload = function(event) {
                         try {
                             predictionsData = parseCSV(event.target.result);
-                            displayData();
+                            
+                            // --- START: Filter predictions to only include those with matching notes ---
+                            if (notesData.length > 0) {
+                                const uniqueNoteEncounterIds = new Set(notesData.map(note => String(note.encounter_id).toLowerCase())); // Use lowercase for robust matching
+                                const originalPredictionCount = predictionsData.length;
+
+                                predictionsData = predictionsData.filter(prediction => {
+                                    const encounterIdStr = String(prediction.encounter_id).toLowerCase(); // Use lowercase for robust matching
+                                    return uniqueNoteEncounterIds.has(encounterIdStr);
+                                });
+
+                                const filteredPredictionCount = predictionsData.length;
+                                console.log(`Filtered predictions: Kept ${filteredPredictionCount} out of ${originalPredictionCount} based on encounter_id matching in notes.`);
+                                if (filteredPredictionCount === 0 && originalPredictionCount > 0) {
+                                     showStatus('Warning: No predictions found matching encounter IDs present in the notes file.', 'error');
+                                     loaderContainer.classList.add('hidden');
+                                     return; // Stop processing if no predictions match notes
+                                }
+                            } else {
+                                // If notes file is empty, potentially warn or filter out all predictions
+                                console.warn("Notes data is empty. Predictions cannot be matched to notes.");
+                                // Filter out all predictions if notes are required
+                                predictionsData = []; 
+                            }
+                            // --- END: Filter predictions ---                            
+
+                            displayData(); // Now displayData will use the potentially filtered predictionsData
                             loaderContainer.classList.add('hidden');
-                            showStatus('Files processed successfully.', 'success');
+                            if (predictionsData.length > 0) {
+                                showStatus('Files processed successfully.', 'success');
+                            } // Status for no matching predictions already shown above
                         } catch (error) {
                             loaderContainer.classList.add('hidden');
                             showStatus('Error parsing predictions file: ' + error.message, 'error');
@@ -657,78 +1197,745 @@
 
         // Display the parsed data
         function displayData() {
-            // Hide these displays since we're going directly to the detailed view
-            // displayTable(notesData, notesContent, 'notes-table', showNoteDetails);
-            // displayTable(predictionsData, predictionsContent, 'predictions-table', showPredictionDetails);
-            
-            // If we have predictions, show the first one immediately
             if (predictionsData && predictionsData.length > 0) {
-                // Show the details panel directly
+                // Show the details panel
                 detailsPanel.style.display = 'block';
-                showPredictionDetails(0);
                 
-                // Update counter
-                updatePredictionCounter(0);
+                // Populate the version filters
+                populateVersionFilters();
+                
+                // Get unique predictions
+                const uniquePredictions = getUniquePredictions();
+                
+                if (uniquePredictions.length > 0) {
+                    navigateToPrediction(0);
+                } else {
+                    showStatus('No unique predictions found in the file.', 'error');
+                }
             } else {
                 showStatus('No predictions found in the file.', 'error');
             }
         }
 
-        // Helper function to create and display a table
-        function displayTable(data, container, tableId, rowClickHandler) {
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p>No data available.</p>';
+        // First, modify the groupPredictionsByVersion function to track unique encounter/note date combinations
+        function groupPredictionsByVersion(predictionIndex) {
+            const prediction = predictionsData[predictionIndex];
+            if (!prediction) return {};
+            
+            // Reset grouping variables
+            versionPredictions = {};
+            versionKeys = [];
+            
+            // Set current encounter and note date
+            currentEncounterId = prediction.encounter_id;
+            currentNoteDate = prediction.note_date;
+            
+            // Find all predictions for this encounter and note date
+            const matchingPredictions = predictionsData.filter(p => 
+                p.encounter_id === currentEncounterId && 
+                p.note_date === currentNoteDate);
+            
+            // Group by version key
+            matchingPredictions.forEach(p => {
+                const versionKey = p.version_key || 'unknown';
+                
+                if (!versionPredictions[versionKey]) {
+                    versionPredictions[versionKey] = [];
+                    versionKeys.push(versionKey);
+                }
+                
+                versionPredictions[versionKey].push(p);
+            });
+            
+            // Set current version key to the first one if not already set
+            if (!currentVersionKey || !versionPredictions[currentVersionKey]) {
+                currentVersionKey = versionKeys.length > 0 ? versionKeys[0] : null;
+            }
+            
+            return versionPredictions;
+        }
+
+        // Add helper function to get unique predictions (to avoid duplicates)
+        function getUniquePredictions() {
+            // Create a map of unique encounter_id + note_date combinations
+            const uniquePredictionMap = new Map();
+            
+            predictionsData.forEach(prediction => {
+                const key = `${prediction.encounter_id}_${prediction.note_date}`;
+                if (!uniquePredictionMap.has(key)) {
+                    uniquePredictionMap.set(key, prediction);
+                }
+            });
+            
+            // Convert map to array
+            return Array.from(uniquePredictionMap.values());
+        }
+
+        // Modify the navigation function to use unique predictions
+        function navigateToPrediction(index) {
+            // Get unique predictions
+            const uniquePredictions = getUniquePredictions();
+            
+            if (index < 0 || index >= uniquePredictions.length) return;
+            
+            // Find the corresponding index in the original predictions array
+            const uniquePrediction = uniquePredictions[index];
+            const originalIndex = predictionsData.findIndex(p => 
+                p.encounter_id === uniquePrediction.encounter_id && 
+                p.note_date === uniquePrediction.note_date);
+            
+            if (originalIndex === -1) {
+                console.error("Failed to find prediction in original array");
                 return;
             }
+            
+            // Directly update the current index
+            currentIndex = originalIndex;
+            
+            // Update navigation buttons
+            prevDetailButton.disabled = index === 0;
+            nextDetailButton.disabled = index === uniquePredictions.length - 1;
+            
+            // Update counter with visual feedback
+            updatePredictionCounter(index, uniquePredictions.length);
+            
+            // Reset version-specific state
+            currentVersionKey = null;
+            
+            // Fetch the prediction and display it
+            const prediction = predictionsData[currentIndex];
+            if (!prediction) {
+                console.error("Navigation failed: No prediction at index", currentIndex);
+                return;
+            }
+            
+            // Group predictions by version
+            groupPredictionsByVersion(currentIndex);
+            
+            // Choose the first version if not already set
+            if (!currentVersionKey || !versionPredictions[currentVersionKey]) {
+                currentVersionKey = versionKeys.length > 0 ? versionKeys[0] : null;
+            }
+            
+            // Render version tabs and show details
+            renderVersionTabs();
+            displayPredictionDetails(prediction);
+            
+            // Log for debugging
+            console.log("Navigated to unique prediction:", index + 1, "of", uniquePredictions.length);
+        }
 
-            // Create table
-            const table = document.createElement('table');
-            table.id = tableId;
+        // Update the prediction counter to use unique prediction counts
+        function updatePredictionCounter(index, total) {
+            const counterElement = document.getElementById('predictionCounter');
+            counterElement.textContent = `Prediction ${index + 1} of ${total}`;
             
-            // Create header row
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
+            // Add a subtle flash effect to make the counter change more noticeable
+            counterElement.style.transition = 'none';
+            counterElement.style.backgroundColor = '#ffeb3b';
+            setTimeout(() => {
+                counterElement.style.transition = 'background-color 1s ease';
+                counterElement.style.backgroundColor = 'transparent';
+            }, 50);
+        }
+
+        // Modify displayPredictionDetails to handle the comparison view differently
+        function displayPredictionDetails(prediction) {
+            // Reset validation UI (buttons, comments, etc.)
+            resetValidationUI();
             
-            // Get all headers from the first row
-            const headers = Object.keys(data[0]);
+            // Clear current validation state
+            currentValidationChoice = null;
+            currentInvalidReason = null;
             
-            headers.forEach(header => {
-                const th = document.createElement('th');
-                th.textContent = header;
-                headerRow.appendChild(th);
+            // Reset invalid reason radio buttons
+            document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // Determine if we are in a multi-version scenario for this encounter/note date
+            const versionsAvailable = versionKeys.filter(key => key !== 'compare'); // Get actual versions
+            const isMultiVersion = versionsAvailable.length > 1;
+
+            // --- Visibility Logic --- 
+            // Ranking controls (bottom) are shown only if multiple versions exist
+            document.querySelector('.ranking-controls').style.display = isMultiVersion ? 'block' : 'none';
+            if (isMultiVersion) {
+                setupRankingUI(); // Set up ranking UI if needed
+            }
+
+            // Validation controls (right panel) container is always visible, 
+            // interactivity depends on the selected tab (handled below and in updateVersionSpecificUI)
+            document.querySelector('.validation-controls').style.display = 'block'; 
+
+            // --- Display Content --- 
+            if (currentVersionKey === 'compare' && isMultiVersion) {
+                displayComparisonView(); // Show comparison in right panel if 'Compare All' is selected
+                // Disable validation interaction when comparing all
+                disableValidationControls();
+            } else {
+                // If 'compare' was selected but there's only one version, switch to that version
+                if (currentVersionKey === 'compare' && !isMultiVersion) {
+                    currentVersionKey = versionsAvailable[0] || null; // Get the single available version key
+                    renderVersionTabs(); // Update tabs to reflect the switch
+                }
+
+                // Display the selected single version prediction
+                displayVersionPrediction(currentVersionKey);
+                
+                // Restore & Enable validation state ONLY if a single version is displayed
+                enableValidationControls(); // Ensure controls are interactive for single version view
+                // No need to check isMultiVersion here, as this 'else' block only runs for single version cases (or no versions)
+                const versionValidationKey = `${currentIndex}_${currentVersionKey}`;
+                if (validationResults[versionValidationKey]) {
+                    const validation = validationResults[versionValidationKey];
+                    currentValidationChoice = validation.result;
+                    
+                    if (validation.result === 'valid') {
+                        validButton.classList.add('selected');
+                    } else {
+                        invalidButton.classList.add('selected');
+                        invalidReasons.style.display = 'block';
+                        
+                        if (validation.invalidReason) {
+                            currentInvalidReason = validation.invalidReason;
+                            const reasonInput = document.querySelector(`input[name="invalidReason"][value="${validation.invalidReason}"]`);
+                            if (reasonInput) {
+                                reasonInput.checked = true;
+                            }
+                        }
+                    }
+                    
+                    updateValidationStatus();
+                    updateSubmitButton();
+                    
+                    if (validation.comment) {
+                        commentArea.value = validation.comment;
+                    } else {
+                        commentArea.value = '';
+                    }
+                } else {
+                    commentArea.value = '';
+                }
+            }
+            
+            // Find all matching notes up to the prediction date and display them
+            showNotesForPrediction(prediction);
+
+            // --- Conditionally show/hide comparison and ranking based on filter state --- 
+            const isFilterActive = selectedVersionKeys.length > 0;
+            const comparisonRow = document.getElementById('multiColumnComparison');
+            const rankingControls = document.querySelector('.ranking-controls');
+
+            if (isFilterActive) {
+                 // If filter is active, render the comparison row and ranking UI
+                 // The functions themselves will handle hiding if only 1 version is filtered
+                 renderMultiColumnComparisonRow();
+                 setupRankingUI(); 
+             } else {
+                 // If no filter is active, hide these sections
+                 if (comparisonRow) comparisonRow.style.display = 'none';
+                 if (rankingControls) rankingControls.style.display = 'none';
+             }
+            // --- End Conditional Display --- 
+        }
+
+        // Add a function to set up the ranking UI
+        function setupRankingUI() {
+            const rankingContainer = document.getElementById('rankingContainer');
+            rankingContainer.innerHTML = '';
+
+            // Determine which keys to display based on filter
+            const keysToDisplay = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+
+            // Filter out 'compare' key if present
+            const actualKeysToRank = keysToDisplay.filter(key => key !== 'compare');
+
+            // Only show ranking if there are multiple versions *to display*
+            if (actualKeysToRank.length <= 1) {
+                 // Optionally hide the whole ranking section or just show a message
+                 // rankingContainer.innerHTML = '<p>Ranking requires at least two versions to compare.</p>';
+                 // Or hide the parent .ranking-controls element
+                 const rankingControls = document.querySelector('.ranking-controls');
+                 if (rankingControls) rankingControls.style.display = 'none';
+                 return; // Don't proceed if only one or zero versions to rank
+            }
+
+            // Ensure the parent container is visible if we are proceeding
+             const rankingControls = document.querySelector('.ranking-controls');
+             if (rankingControls) rankingControls.style.display = 'block';
+
+            // Create the ranking UI with drag-and-drop functionality
+            const rankInstructions = document.createElement('div');
+            rankInstructions.className = 'ranking-instructions';
+            rankInstructions.textContent = 'Rank the model versions from best to worst by dragging them:';
+            rankingContainer.appendChild(rankInstructions);
+
+            // Create a sortable list
+            const rankList = document.createElement('div');
+            rankList.id = 'rankList';
+            rankList.className = 'rank-list';
+
+            // Add items for each version *to display*
+            actualKeysToRank.forEach((versionKey, index) => {
+                // No need to check for 'compare' here as it's already filtered
+
+                const rankItem = document.createElement('div');
+                rankItem.className = 'rank-item';
+                rankItem.dataset.versionKey = versionKey;
+                rankItem.setAttribute('draggable', 'true');
+                
+                // Get first prediction of this version
+                const prediction = versionPredictions[versionKey][0];
+                let versionText = versionKey;
+                
+                if (prediction && prediction.model_version && prediction.prompt_version) {
+                    // Construct title without model name
+                    versionText = `${prediction.model_version} / ${prediction.prompt_version}`;
+                    // Example of how to add variant back if needed, without the model name itself:
+                    // const modelVariant = MODEL_VERSION_INFO[prediction.model_version]?.variant;
+                    // if (modelVariant && modelVariant !== "standard") {
+                    //    versionText = `${prediction.model_version} ${modelVariant} / ${prediction.prompt_version}`;
+                    //}
+                }
+                
+                rankItem.innerHTML = `
+                    <div class="rank-handle">☰</div>
+                    <div class="rank-content">
+                        <div class="rank-title">${versionText}</div>
+                        <div class="rank-prediction">${prediction?.final_prediction || ''}</div>
+                    </div>
+                `;
+                
+                // Add event listeners for drag and drop
+                rankItem.addEventListener('dragstart', handleDragStart);
+                rankItem.addEventListener('dragover', handleDragOver);
+                rankItem.addEventListener('drop', handleDrop);
+                rankItem.addEventListener('dragend', handleDragEnd);
+                
+                rankList.appendChild(rankItem);
             });
             
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
+            rankingContainer.appendChild(rankList);
             
-            // Create table body with data rows
-            const tbody = document.createElement('tbody');
+            // Add comment box
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'ranking-comment';
+            commentDiv.innerHTML = `
+                <label for="rankingComment">Comments on model ranking:</label>
+                <textarea id="rankingComment" class="comment-area" placeholder="Add any additional comments about why you ranked the models this way..."></textarea>
+            `;
+            rankingContainer.appendChild(commentDiv);
             
-            data.forEach((row, index) => {
-                const tr = document.createElement('tr');
-                tr.dataset.index = index;
+            // Add submit button
+            const submitButton = document.createElement('button');
+            submitButton.id = 'submitRanking';
+            submitButton.className = 'submit-button';
+            submitButton.textContent = 'Submit Ranking';
+            submitButton.addEventListener('click', submitRankingResult);
+            rankingContainer.appendChild(submitButton);
+            
+            // Restore previous ranking if available
+            const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
+            if (validationResults[rankingKey]) {
+                const savedRanking = validationResults[rankingKey];
                 
-                headers.forEach(header => {
-                    const td = document.createElement('td');
-                    
-                    // Truncate long text for better display
-                    const text = row[header] || '';
-                    td.textContent = text.length > 100 ? text.substring(0, 100) + '...' : text;
-                    
-                    tr.appendChild(td);
+                // Sort the rank items according to saved ranking
+                const rankItems = Array.from(rankList.querySelectorAll('.rank-item'));
+                const sortedItems = [];
+                
+                savedRanking.order.forEach(vk => {
+                    const item = rankItems.find(i => i.dataset.versionKey === vk);
+                    if (item) sortedItems.push(item);
                 });
                 
-                // Add click event to show details
-                tr.addEventListener('click', () => rowClickHandler(index));
+                // Clear list and re-add in order
+                rankList.innerHTML = '';
+                sortedItems.forEach(item => rankList.appendChild(item));
                 
-                tbody.appendChild(tr);
+                // Restore comment
+                document.getElementById('rankingComment').value = savedRanking.comment || '';
+            }
+        }
+
+        // Drag and drop functions for ranking
+        function handleDragStart(e) {
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.dataset.versionKey);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation();
+            
+            const draggingItem = document.querySelector('.dragging');
+            const versionKey = e.dataTransfer.getData('text/plain');
+            
+            if (draggingItem !== this) {
+                const rankList = document.getElementById('rankList');
+                const items = Array.from(rankList.querySelectorAll('.rank-item'));
+                const targetIndex = items.indexOf(this);
+                const sourceIndex = items.indexOf(draggingItem);
+                
+                // Move item to new position
+                if (sourceIndex < targetIndex) {
+                    rankList.insertBefore(draggingItem, this.nextSibling);
+                } else {
+                    rankList.insertBefore(draggingItem, this);
+                }
+            }
+            
+            return false;
+        }
+
+        function handleDragEnd() {
+            document.querySelectorAll('.rank-item').forEach(item => {
+                item.classList.remove('dragging');
+            });
+        }
+
+        // Function to submit ranking results
+        function submitRankingResult() {
+            // Get the current order of items
+            const rankItems = Array.from(document.querySelectorAll('.rank-item'));
+            const rankOrder = rankItems.map(item => item.dataset.versionKey);
+            
+            // Get ranking comment
+            const comment = document.getElementById('rankingComment').value;
+            
+            // Create ranking object
+            const rankingData = {
+                order: rankOrder,
+                comment: comment,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Store using a key that combines the encounter and note date
+            const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
+            validationResults[rankingKey] = rankingData;
+            
+            // Provide feedback
+            showStatus(`Ranking submitted successfully`, 'success');
+
+            // Only auto-advance if all versions have also been validated
+            if (shouldAutoAdvance()) {
+                let canNavigate = false;
+                let targetFilteredIndex = -1;
+                let targetUniqueIndex = -1;
+
+                // Determine if a next item exists and what its index is
+                if (selectedVersionKeys.length > 0) {
+                    // Filtered navigation: Check if there is a next filtered index
+                    if (currentFilteredIndex < filteredPredictionIndices.length - 1) {
+                        canNavigate = true;
+                        targetFilteredIndex = currentFilteredIndex + 1;
+                    }
+                } else {
+                    // Unfiltered navigation: Recalculate current unique index and check if there's a next one
+                    const uniquePredictions = getUniquePredictions(); 
+                    const currentUniqueIndex = uniquePredictions.findIndex(p =>
+                        p.encounter_id === currentEncounterId &&
+                        p.note_date === currentNoteDate);
+                    if (currentUniqueIndex !== -1 && currentUniqueIndex < uniquePredictions.length - 1) {
+                        canNavigate = true;
+                        targetUniqueIndex = currentUniqueIndex + 1; 
+                    }
+                }
+
+                // Perform navigation or disable button
+                if (canNavigate) {
+                    setTimeout(() => {
+                        if (selectedVersionKeys.length > 0) {
+                            navigateToFilteredPrediction(targetFilteredIndex);
+                        } else {
+                            navigateToPrediction(targetUniqueIndex);
+                        }
+                    }, 750);
+                } else {
+                    // No next item available (already on the last one)
+                    console.log("Auto-advance skipped after ranking: Last item in list.");
+                    const rankingSubmitButton = document.getElementById('submitRanking');
+                    if (rankingSubmitButton) rankingSubmitButton.disabled = true;
+                }
+                // REMOVED previous logic block checking isLastFiltered/isLastUnfiltered
+            }
+        }
+
+        // Function to check if we should auto-advance to the next prediction
+        function shouldAutoAdvance() {
+            // Determine the set of version keys we are currently concerned with (filtered or all)
+            const keysToCheck = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+            const actualKeysToCheck = keysToCheck.filter(key => key !== 'compare');
+
+            // If no actual keys to check, something is wrong, don't advance
+            if (actualKeysToCheck.length === 0) {
+                 return false;
+             }
+
+             // Check if ranking is required and submitted
+             let rankingComplete = true;
+             if (actualKeysToCheck.length > 1) { // Ranking only needed if >1 version is displayed
+                 const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
+                 rankingComplete = rankingKey in validationResults;
+             }
+
+            // Check if all *displayed* versions have been validated
+            let allVersionsValidated = true;
+            actualKeysToCheck.forEach(versionKey => {
+                // FIX: Use the correct stable key to check validation results
+                // const versionValidationKey = `${currentIndex}_${versionKey}`; // OLD UNRELIABLE KEY
+                const validationKey = `validation_${currentEncounterId}_${currentNoteDate}_${versionKey}`; // NEW STABLE KEY
+                if (!(validationKey in validationResults)) { // Use the correct key here
+                    allVersionsValidated = false;
+                }
+            });
+
+            // Advance if all required validations are done AND ranking is done (if required)
+            return allVersionsValidated && rankingComplete;
+        }
+
+        // Modify the saveValidationResults function for denormalized export
+        function saveValidationResults() {
+            // Get unique predictions to use as base rows
+            const uniquePredictions = getUniquePredictions();
+            
+            // Create a CSV string from the validation results in denormalized format
+            // First, create headers
+            const headers = [
+                'Encounter ID',
+                'Note Date',
+                'Ground Truth',
+                'Note Text',
+                'Note Types'
+            ];
+            
+            // Find all unique version keys across the entire dataset
+            const allVersionKeys = new Set();
+            predictionsData.forEach(p => {
+                if (p.version_key) allVersionKeys.add(p.version_key);
             });
             
-            table.appendChild(tbody);
+            // Add columns for each version
+            allVersionKeys.forEach(versionKey => {
+                if (versionKey === 'compare') return;
+                
+                headers.push(`${versionKey}_Raw_Prediction`);
+                headers.push(`${versionKey}_Raw_Confidence`);
+                headers.push(`${versionKey}_Final_Prediction`);
+                headers.push(`${versionKey}_Final_Confidence`);
+                headers.push(`${versionKey}_Attribution`);
+                headers.push(`${versionKey}_Validation_Result`);
+                headers.push(`${versionKey}_Invalid_Reason`);
+                headers.push(`${versionKey}_Comments`);
+            });
             
-            // Add table to container
-            container.innerHTML = '';
-            container.appendChild(table);
+            // Add ranking columns
+            headers.push('Ranking_Order');
+            headers.push('Ranking_Comments');
+            
+            // Create the CSV rows
+            const csvRows = [headers.join(',')];
+            
+            // Process each unique prediction
+            uniquePredictions.forEach(basePrediction => {
+                const row = [];
+                const encounterId = basePrediction.encounter_id;
+                const noteDate = basePrediction.note_date;
+                
+                // Add basic prediction info
+                row.push(encounterId);
+                row.push(noteDate);
+                row.push(basePrediction.ground_truth || '');
+                
+                // Get notes text and types
+                let combinedNoteText = '';
+                let combinedNoteTypes = '';
+                
+                // Find relevant notes
+                const predictionDate = noteDate || basePrediction.prediction_timestamp;
+                let relevantNotes = [];
+                
+                if (predictionDate && encounterId) {
+                    const predDate = new Date(predictionDate);
+                    
+                    // Filter notes by encounter_id and date
+                    relevantNotes = notesData.filter(note => {
+                        if (note.encounter_id !== encounterId) return false;
+                        
+                        if (note.note_date) {
+                            const noteDate = new Date(note.note_date);
+                            return noteDate <= predDate;
+                        }
+                        
+                        return true;
+                    });
+                    
+                    // Extract note text and types
+                    const noteTypes = [];
+                    relevantNotes.forEach(note => {
+                        let noteText = '';
+                        const noteType = note.note_type || note.type || 'Clinical Note';
+                        
+                        // Extract text
+                        if (note.note_text) {
+                            noteText = note.note_text;
+                        } else if (note.text) {
+                            noteText = note.text;
+                        } else if (note.anonymized_text) {
+                            noteText = note.anonymized_text;
+                        } else {
+                            // If no dedicated text field, try to identify it
+                            for (const key in note) {
+                                if (typeof note[key] === 'string' && note[key].length > 200) {
+                                    noteText = note[key];
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Add to combined text with separator
+                        if (combinedNoteText) combinedNoteText += ' ||| ';
+                        combinedNoteText += noteText.replace(/,/g, ';').replace(/\n/g, ' ').replace(/"/g, '""');
+                        
+                        // Add note type
+                        noteTypes.push(noteType);
+                    });
+                    
+                    combinedNoteTypes = noteTypes.join('; ');
+                }
+                
+                // Add notes to row
+                row.push(`"${combinedNoteText}"`);
+                row.push(`"${combinedNoteTypes}"`);
+                
+                // Find all versions for this encounter/note date
+                const matchingPredictions = predictionsData.filter(p => 
+                    p.encounter_id === encounterId && 
+                    p.note_date === noteDate);
+                
+                // Group by version key
+                const versionMap = {};
+                matchingPredictions.forEach(p => {
+                    const versionKey = p.version_key || 'unknown';
+                    versionMap[versionKey] = p;
+                });
+                
+                // Add data for each version column
+                allVersionKeys.forEach(versionKey => {
+                    if (versionKey === 'compare') return;
+                    
+                    const versionPrediction = versionMap[versionKey];
+                    
+                    // Raw prediction data
+                    row.push(versionPrediction?.raw_prediction || '');
+                    row.push(versionPrediction?.raw_confidence || '');
+                    
+                    // Final prediction data
+                    row.push(versionPrediction?.final_prediction || versionPrediction?.prediction || '');
+                    row.push(versionPrediction?.final_confidence || versionPrediction?.confidence || '');
+                    
+                    // Attribution
+                    let attributionText = '';
+                    if (versionPrediction?.attribution) {
+                        try {
+                            if (typeof versionPrediction.attribution === 'string') {
+                                const cleanedAttr = versionPrediction.attribution.replace(/^"|"$/g, '');
+                                const parsed = JSON.parse(cleanedAttr);
+                                attributionText = Array.isArray(parsed) ? parsed.join('; ') : String(parsed);
+                            } else if (Array.isArray(versionPrediction.attribution)) {
+                                attributionText = versionPrediction.attribution.join('; ');
+                            } else {
+                                attributionText = String(versionPrediction.attribution);
+                            }
+                        } catch (e) {
+                            attributionText = String(versionPrediction.attribution);
+                        }
+                    }
+                    row.push(`"${attributionText.replace(/"/g, '""')}"`);
+                    
+                    // Validation data
+                    // FIX: Use the new stable key format for retrieval
+                    const validationKey = `validation_${encounterId}_${noteDate}_${versionKey}`; // NEW, STABLE KEY
+                    const validation = validationResults[validationKey]; // NEW
+                    
+                    row.push(validation?.result || '');
+                    row.push(validation?.invalidReason || '');
+                    row.push(`"${(validation?.comment || '').replace(/"/g, '""')}"`);
+                });
+                
+                // Add ranking data
+                const rankingKey = `ranking_${encounterId}_${noteDate}`;
+                const ranking = validationResults[rankingKey];
+                
+                row.push(ranking ? `"${ranking.order.join(',')}"` : '');
+                row.push(ranking ? `"${(ranking.comment || '').replace(/"/g, '""')}"` : '');
+                
+                // Add row to CSV
+                csvRows.push(row.join(','));
+            });
+            
+            const csvContent = csvRows.join('\n');
+            
+            // Create a blob and download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `clinical_validation_denormalized_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Show status message
+            showStatus('Validation results saved as CSV.', 'success');
+        }
+
+        // Modify showPreviousDetail/showNextDetail to work with filtered navigation
+        function showPreviousDetail() {
+            // If filtering is active, navigate through filtered predictions
+            if (selectedVersionKeys.length > 0) {
+                if (currentFilteredIndex > 0) {
+                    navigateToFilteredPrediction(currentFilteredIndex - 1);
+                }
+                return;
+            }
+            
+            // Normal navigation using unique predictions
+            const uniquePredictions = getUniquePredictions();
+            const currentUniqueIndex = uniquePredictions.findIndex(p => 
+                p.encounter_id === currentEncounterId && 
+                p.note_date === currentNoteDate);
+            
+            if (currentUniqueIndex > 0) {
+                navigateToPrediction(currentUniqueIndex - 1);
+            }
+        }
+
+        function showNextDetail() {
+            // If filtering is active, navigate through filtered predictions
+            if (selectedVersionKeys.length > 0) {
+                if (currentFilteredIndex < filteredPredictionIndices.length - 1) {
+                    navigateToFilteredPrediction(currentFilteredIndex + 1);
+                }
+                return;
+            }
+            
+            // Normal navigation using unique predictions
+            const uniquePredictions = getUniquePredictions();
+            const currentUniqueIndex = uniquePredictions.findIndex(p => 
+                p.encounter_id === currentEncounterId && 
+                p.note_date === currentNoteDate);
+            
+            if (currentUniqueIndex < uniquePredictions.length - 1) {
+                navigateToPrediction(currentUniqueIndex + 1);
+            }
         }
 
         // Show status message
@@ -737,292 +1944,197 @@
             statusDiv.className = type;
         }
 
-        // Show note details
-        function showNoteDetails(index) {
-            const note = notesData[index];
-            if (!note) return;
-            
-            currentIndex = index;
-            
-            // Update navigation buttons
-            prevDetailButton.disabled = index === 0;
-            nextDetailButton.disabled = index === notesData.length - 1;
-            
-            // Metadata section
-            let metadataHtml = '<div style="margin-bottom: 15px;">';
-            
-            // Add key metadata fields
-            for (const key in note) {
-                if (['note_text', 'text', 'content'].includes(key)) continue; // Skip the actual note text
-                metadataHtml += `<div><strong>${key}:</strong> ${note[key]}</div>`;
+        // Update the submitValidationResult function to use version-specific validation keys
+        function submitValidationResult() {
+            // Store the validation result along with the comment and invalid reason if applicable
+            const prediction = predictionsData[currentIndex];
+            if (!prediction) {
+                showStatus('No prediction found to validate.', 'error');
+                return;
             }
-            metadataHtml += '</div>';
-            noteMetadata.innerHTML = metadataHtml;
-            
-            // Note text section
-            let textContent = '';
-            if (note.note_text) {
-                textContent = note.note_text;
-            } else if (note.text) {
-                textContent = note.text;
-            } else {
-                // If no dedicated text field, try to identify it
-                for (const key in note) {
-                    if (typeof note[key] === 'string' && note[key].length > 200) {
-                        textContent = note[key];
-                        break;
-                    }
+
+            // FIX: Use stable identifiers for the key
+            const validationKey = `validation_${prediction.encounter_id}_${prediction.note_date}_${currentVersionKey}`;
+
+            // Create validation object
+            const validationData = {
+                result: currentValidationChoice,
+                comment: commentArea.value,
+                predictionId: prediction.id || currentIndex,
+                encounterId: prediction.encounter_id,
+                timestamp: new Date().toISOString(),
+                prediction: prediction.prediction || prediction.final_prediction,
+                versionKey: currentVersionKey // Store which version this validation is for
+            };
+
+            // Add invalid reason if applicable
+            if (currentValidationChoice === 'invalid' && currentInvalidReason) {
+                validationData.invalidReason = currentInvalidReason;
+            }
+
+            // FIX: Use the new stable key
+            validationResults[validationKey] = validationData;
+
+            // FIX: Update status call to reflect the specific version validated
+            updateValidationStatus(`for version: ${currentVersionKey}`);
+
+            // FIX: Update feedback to reflect the specific version validated
+            showStatus(`Validation submitted successfully for version: ${currentVersionKey}`, 'success');
+
+            // Only auto-advance if all versions have been validated
+            if (shouldAutoAdvance()) {
+                // Get unique predictions for navigation
+                const uniquePredictions = getUniquePredictions();
+                const currentUniqueIndex = uniquePredictions.findIndex(p =>
+                    p.encounter_id === currentEncounterId &&
+                    p.note_date === currentNoteDate);
+
+                // Check if we are on the last item *before* setting timeout
+                const isLastFiltered = selectedVersionKeys.length > 0 && currentFilteredIndex >= filteredPredictionIndices.length - 1;
+                const isLastUnfiltered = selectedVersionKeys.length === 0 && currentUniqueIndex >= uniquePredictions.length - 1;
+
+                if (!isLastFiltered && !isLastUnfiltered) {
+                    // If not on the last item, set timeout for navigation
+                    setTimeout(() => {
+                        // FIX: Use filtered navigation if filters are active
+                        if (selectedVersionKeys.length > 0) {
+                             // We already checked we're not on the last filtered item
+                            navigateToFilteredPrediction(currentFilteredIndex + 1);
+                        } else {
+                            // We already checked we're not on the last unfiltered item
+                            navigateToPrediction(currentUniqueIndex + 1);
+                        }
+                    }, 750);
+                } else {
+                    // If we *are* on the last item (filtered or unfiltered), disable the button immediately
+                    console.log("Auto-advance skipped: Last item in list.");
+                    submitValidation.disabled = true; // Disable validation submit
                 }
             }
-            noteText.innerHTML = textContent;
-            
-            // Try to find matching prediction based on encounter_id
-            const matchingPredictions = predictionsData.filter(pred => 
-                pred.encounter_id === note.encounter_id);
-            
-            if (matchingPredictions.length > 0) {
-                let predHtml = '';
-                
-                matchingPredictions.forEach(pred => {
-                    predHtml += `<div class="prediction-info">`;
-                    predHtml += `<div class="prediction-title">Prediction: ${pred.prediction}</div>`;
-                    
-                    // Add prediction details
-                    if (pred.confidence) {
-                        predHtml += `<div><strong>Confidence:</strong> ${pred.confidence}</div>`;
-                    }
-                    
-                    if (pred.ground_truth) {
-                        predHtml += `<div><strong>Ground Truth:</strong> ${pred.ground_truth}</div>`;
-                        predHtml += `<div><strong>Correct:</strong> ${pred.prediction === pred.ground_truth ? 'Yes' : 'No'}</div>`;
-                    }
-                    
-                    if (pred.note_date) {
-                        predHtml += `<div><strong>Note Date:</strong> ${pred.note_date}</div>`;
-                    }
-                    
-                    if (pred.prediction_timestamp) {
-                        predHtml += `<div><strong>Prediction Time:</strong> ${pred.prediction_timestamp}</div>`;
-                    }
-                    
-                    // Process attribution if available
-                    if (pred.attribution) {
-                        let attributionItems = [];
-                        
-                        // Try to parse attribution if it's a JSON string
-                        try {
-                            if (typeof pred.attribution === 'string') {
-                                // Clean up the string if it has surrounding quotes
-                                const cleanedAttr = pred.attribution.replace(/^"|"$/g, '');
-                                attributionItems = JSON.parse(cleanedAttr);
-                            } else if (Array.isArray(pred.attribution)) {
-                                attributionItems = pred.attribution;
-                            }
-                        } catch (e) {
-                            // If parsing fails, use as is
-                            attributionItems = [pred.attribution];
-                        }
-                        
-                        predHtml += `<div><strong>Attribution:</strong></div>`;
-                        predHtml += `<div>`;
-                        
-                        if (Array.isArray(attributionItems)) {
-                            attributionItems.forEach(item => {
-                                predHtml += `<span class="attribution-item">${item}</span>`;
-                                
-                                // Highlight this term in the note text
-                                if (item && textContent) {
-                                    const regex = new RegExp(`(${item})`, 'gi');
-                                    textContent = textContent.replace(regex, '<span class="highlight">$1</span>');
-                                    noteText.innerHTML = textContent;
-                                }
-                            });
-                        } else {
-                            predHtml += `<span class="attribution-item">${attributionItems}</span>`;
-                        }
-                        
-                        predHtml += `</div>`;
-                    }
-                    
-                    predHtml += `</div>`;
-                });
-                
-                predictionInfo.innerHTML = predHtml;
-            } else {
-                predictionInfo.innerHTML = '<p>No matching predictions found for this note.</p>';
-            }
-            
-            detailsPanel.style.display = 'block';
         }
 
-        // Show prediction details
-        function showPredictionDetails(index) {
-            const prediction = predictionsData[index];
-            if (!prediction) return;
+        // Update the validation status display to include version information
+        function updateValidationStatus(versionInfo = '') {
+            // FIX: Use the correct stable key to retrieve validation status
+            // const versionValidationKey = `${currentIndex}_${currentVersionKey}`; // OLD UNRELIABLE KEY
+            const validationKey = `validation_${currentEncounterId}_${currentNoteDate}_${currentVersionKey}`; // NEW STABLE KEY
+            // const validation = validationResults[versionValidationKey]; // OLD LOOKUP
+            const validation = validationResults[validationKey]; // NEW LOOKUP
             
-            currentIndex = index;
-            
-            // Update navigation buttons
-            prevDetailButton.disabled = index === 0;
-            nextDetailButton.disabled = index === predictionsData.length - 1;
-            
-            // Update counter
-            updatePredictionCounter(index);
-            
-            // Update validation UI
-            resetValidationUI();
-            invalidReasons.style.display = 'none';
-            
-            // Clear current state
-            currentValidationChoice = null;
-            currentInvalidReason = null;
-            
-            // Reset invalid reason radio buttons
-            document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
-                radio.checked = false;
-            });
-            
-            // Restore validation state if it exists
-            if (validationResults[index]) {
-                const validation = validationResults[index];
-                currentValidationChoice = validation.result;
+            if (validation) {
+                let statusText = validation.result === 'valid' ? 'Valid Attribution' : 'Invalid Attribution';
                 
-                if (validation.result === 'valid') {
-                    validButton.classList.add('selected');
-                } else {
-                    invalidButton.classList.add('selected');
-                    invalidReasons.style.display = 'block';
-                    
-                    // Restore invalid reason if available
-                    if (validation.invalidReason) {
-                        currentInvalidReason = validation.invalidReason;
-                        const reasonInput = document.querySelector(`input[name="invalidReason"][value="${validation.invalidReason}"]`);
-                        if (reasonInput) {
-                            reasonInput.checked = true;
-                        }
-                    }
+                // Add version info if provided
+                if (versionInfo) {
+                    statusText += ` ${versionInfo}`;
                 }
                 
-                updateValidationStatus();
-                updateSubmitButton();
-            }
-            
-            // Restore comments if any
-            if (validationResults[index] && validationResults[index].comment) {
-                commentArea.value = validationResults[index].comment;
+                // Add invalid reason to status if available
+                if (validation.result === 'invalid' && validation.invalidReason) {
+                    let reasonText = '';
+                    switch(validation.invalidReason) {
+                        case 'hallucination':
+                            reasonText = 'Hallucination';
+                            break;
+                        case 'invalid_clinical_reasoning':
+                            reasonText = 'Invalid Clinical Reasoning';
+                            break;
+                        case 'other':
+                            reasonText = 'Other';
+                            break;
+                        default:
+                            reasonText = validation.invalidReason;
+                    }
+                    statusText += ` - Reason: ${reasonText}`;
+                }
+                
+                validationStatus.textContent = statusText;
+                validationStatus.className = 'validation-status ' + (validation.result === 'valid' ? 'success' : 'error');
+                validationStatus.style.display = 'block';
             } else {
-                commentArea.value = '';
+                validationStatus.style.display = 'none';
             }
-            
-            let predHtml = `<div class="prediction-info">`;
-            predHtml += `<div class="prediction-title">Prediction: ${prediction.prediction}</div>`;
-            
-            // Add all prediction fields
-            for (const key in prediction) {
-                if (key === 'prediction') continue; // Already displayed
-                
-                // Special handling for note_date to add relative day
-                if (key === 'note_date' && prediction.note_date && prediction.encounter_start) {
-                    const noteDateObj = new Date(prediction.note_date);
-                    const encounterStartObj = new Date(prediction.encounter_start);
-                    
-                    // Calculate difference in days
-                    const diffTime = Math.abs(noteDateObj - encounterStartObj);
-                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                    
-                    predHtml += `<div><strong>${key}:</strong> ${prediction[key]} (Day ${diffDays})</div>`;
-                    continue;
-                }
-                
-                if (key === 'note_date' && prediction.note_date) {
-                    // Find encounter start date from various possible field names
-                    const encounterStartDate = prediction.encounter_start || prediction.admission_date || 
-                                              prediction.start_date || prediction.encounter_starttime;
-                    
-                    if (encounterStartDate) {
-                        const noteDateObj = new Date(prediction.note_date);
-                        const encounterStartObj = new Date(encounterStartDate);
-                        
-                        // Calculate difference in days
-                        const diffTime = Math.abs(noteDateObj - encounterStartObj);
-                        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                        
-                        predHtml += `<div><strong>${key}:</strong> ${prediction[key]} (Day ${diffDays})</div>`;
-                    } else {
-                        // Fall back to regular display if no start date is available
-                        predHtml += `<div><strong>${key}:</strong> ${prediction[key]}</div>`;
-                    }
-                    continue;
-                }
-                
-                if (key === 'attribution') {
-                    let attributionItems = [];
-                    
-                    // Try to parse attribution if it's a JSON string
-                    try {
-                        if (typeof prediction.attribution === 'string') {
-                            // Clean up the string if it has surrounding quotes
-                            const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
-                            attributionItems = JSON.parse(cleanedAttr);
-                        } else if (Array.isArray(prediction.attribution)) {
-                            attributionItems = prediction.attribution;
-                        }
-                    } catch (e) {
-                        // If parsing fails, use as is
-                        attributionItems = [prediction.attribution];
-                    }
-                    
-                    predHtml += `<div><strong>Attribution:</strong></div>`;
-                    predHtml += `<div>`;
-                    
-                    if (Array.isArray(attributionItems)) {
-                        attributionItems.forEach((item, idx) => {
-                            const colorIndex = idx % 8; // Use modulo to cycle through the 8 colors
-                            predHtml += `<span class="attribution-item highlight-${colorIndex}">${item}</span>`;
-                        });
-                    } else {
-                        predHtml += `<span class="attribution-item highlight-0">${attributionItems}</span>`;
-                    }
-                    
-                    predHtml += `</div>`;
-                } else {
-                    predHtml += `<div><strong>${key}:</strong> ${prediction[key]}</div>`;
-                }
-            }
-            
-            predHtml += `</div>`;
-            predictionInfo.innerHTML = predHtml;
-            
+        }
+
+        // Add the missing showNotesForPrediction function
+        function showNotesForPrediction(prediction) {
             // Find all matching notes up to the prediction date
-            const predictionDate = prediction.note_date || prediction.prediction_timestamp;
+            const predictionDateStr = prediction.note_date || prediction.prediction_timestamp;
+            const encounterId = prediction.encounter_id;
             let relevantNotes = [];
-            
-            if (predictionDate && prediction.encounter_id) {
-                // Convert to date object for comparison
-                const predDate = new Date(predictionDate);
-                
+
+            // Clear previous notes content
+            const noteTextElement = document.getElementById('noteText');
+            noteTextElement.innerHTML = '';
+            document.getElementById('noteMetadata').innerHTML = '';
+
+            if (!encounterId) {
+                 noteTextElement.innerHTML = '<p style="color: red;">Error: Encounter ID missing in prediction data.</p>';
+                 return;
+            }
+
+            if (!predictionDateStr) {
+                 console.warn('Prediction date (note_date or prediction_timestamp) missing for encounter:', encounterId);
+                 // Optionally, proceed to show all notes for the encounter if date is missing
+                 // relevantNotes = notesData.filter(note => note.encounter_id === encounterId);
+                 // For now, let's indicate the date is missing
+                 noteTextElement.innerHTML = '<p style="color: orange;">Warning: Prediction date missing. Cannot filter notes by date.</p>';
+                 // If you want to show all notes anyway, uncomment the line above and comment this one out.
+                 return;
+            }
+
+            try {
+                // Convert prediction date string to Date object for comparison
+                // Handle potential timezone issues by parsing as UTC if no timezone is specified
+                // We assume note_date or prediction_timestamp are in a format Date.parse() can handle (like ISO 8601)
+                const predDate = new Date(predictionDateStr);
+                if (isNaN(predDate)) {
+                    throw new Error(`Invalid prediction date format: ${predictionDateStr}`);
+                }
+
                 // Filter notes by encounter_id and date
                 relevantNotes = notesData.filter(note => {
-                    // Match by encounter ID
-                    if (note.encounter_id !== prediction.encounter_id) return false;
+                    // 1. Match by encounter ID (case-insensitive just in case, though usually not needed)
+                    if (String(note.encounter_id).toLowerCase() !== String(encounterId).toLowerCase()) return false;
                     
-                    // If note has a date, check if it's before or equal to prediction date
-                    if (note.note_date) {
-                        const noteDate = new Date(note.note_date);
-                        return noteDate <= predDate;
+                    // 2. If note has a date, check if it's before or equal to prediction date
+                    const noteDateStr = note.note_date || note.note_time || note.timestamp; // Check multiple possible fields
+                    if (noteDateStr) {
+                        try {
+                            const noteDate = new Date(noteDateStr);
+                             if (isNaN(noteDate)) {
+                                 console.warn(`Skipping note due to invalid date format: ${noteDateStr} for encounter ${encounterId}`);
+                                 return false; // Skip notes with invalid dates
+                             }
+                            // Compare dates (only date part if needed, but usually comparing full timestamp is fine)
+                            return noteDate <= predDate;
+                        } catch (dateError) {
+                            console.warn(`Error parsing note date: ${noteDateStr}`, dateError);
+                            return false; // Skip notes with date parsing errors
+                        }
                     }
                     
-                    // If no date to compare, include it anyway
-                    return true;
+                    // 3. If note has no date, maybe include it? Decision: Let's exclude for now to be strict.
+                    // If you want undated notes included before a certain prediction, change this.
+                    // console.log(`Note skipped due to missing date: ${note.note_id || JSON.stringify(note).substring(0,100)}`);
+                    return false;
                 });
                 
                 // Sort by date (oldest first) if dates are available
                 relevantNotes.sort((a, b) => {
-                    if (a.note_date && b.note_date) {
-                        return new Date(a.note_date) - new Date(b.note_date);
-                    }
-                    return 0;
+                    const dateA = new Date(a.note_date || a.note_time || a.timestamp);
+                    const dateB = new Date(b.note_date || b.note_time || b.timestamp);
+                    // Handle invalid dates during sort
+                    if (isNaN(dateA) && isNaN(dateB)) return 0;
+                    if (isNaN(dateA)) return 1; // Put invalid dates last
+                    if (isNaN(dateB)) return -1; // Put invalid dates last
+                    return dateA - dateB;
                 });
+
+            } catch (error) {
+                console.error("Error processing prediction date or filtering notes:", error);
+                noteTextElement.innerHTML = `<p style="color: red;">Error filtering notes: ${error.message}</p>`;
+                return;
             }
             
             if (relevantNotes.length > 0) {
@@ -1050,7 +2162,7 @@
                     
                     // Get note type if available
                     const noteType = note.note_type || note.type || 'Clinical Note';
-                    const noteDate = note.note_date || note.timestamp || 'No date';
+                    const noteDate = note.note_date || note.note_time || note.timestamp || 'No date';
                     
                     // Calculate days since admission if possible
                     let daysSinceAdmission = '';
@@ -1081,20 +2193,24 @@
                 });
                 
                 // Highlight attribution terms in the combined note text
-                if (prediction.attribution) {
+                // Use correct version-specific prediction for attribution highlights
+                const versionPrediction = currentVersionKey !== 'compare' && versionPredictions[currentVersionKey] ? 
+                    versionPredictions[currentVersionKey][0] : prediction;
+                    
+                if (versionPrediction.attribution) {
                     let attributionItems = [];
                     
                     try {
-                        if (typeof prediction.attribution === 'string') {
+                        if (typeof versionPrediction.attribution === 'string') {
                             // Clean up the string if it has surrounding quotes
-                            const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                            const cleanedAttr = versionPrediction.attribution.replace(/^"|"$/g, '');
                             attributionItems = JSON.parse(cleanedAttr);
-                        } else if (Array.isArray(prediction.attribution)) {
-                            attributionItems = prediction.attribution;
+                        } else if (Array.isArray(versionPrediction.attribution)) {
+                            attributionItems = versionPrediction.attribution;
                         }
                     } catch (e) {
                         // If parsing fails, use as is
-                        attributionItems = [prediction.attribution];
+                        attributionItems = [versionPrediction.attribution];
                     }
                     
                     if (Array.isArray(attributionItems)) {
@@ -1116,116 +2232,388 @@
                 noteText.innerHTML = combinedText;
                 noteMetadata.innerHTML = ''; // Clear metadata since we now show dates within the notes
             } else {
-                noteText.innerHTML = '<p>No matching notes found for this prediction.</p>';
+                // This case should ideally not happen often if pre-filtering works, but if it does,
+                // it means all notes for this encounter were after the prediction date.
+                noteText.innerHTML = '<p style="color: orange;">No notes found dated *on or before* the prediction date for this encounter.</p>';
                 noteMetadata.innerHTML = '';
             }
+        }
+
+        // Update displayComparisonView to fix incorrect checkmarks and respect filter
+        function displayComparisonView() {
+            let comparisonHtml = '<div class="compare-container">';
+
+            // Determine which keys to display based on filter
+            const keysToDisplay = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+
+            // Create a comparison block for each version *to display*
+            keysToDisplay.forEach(versionKey => {
+                if (versionKey === 'compare' || !versionPredictions[versionKey] || versionPredictions[versionKey].length === 0) {
+                    return;
+                }
+
+                const prediction = versionPredictions[versionKey][0];
                 
-            detailsPanel.style.display = 'block';
-        }
-        
-        // Function to format note text in Epic-like style
-        function formatEpicStyleNote(text) {
-            if (!text) return '';
+                comparisonHtml += `<div class="compare-item">`;
+                
+                // Version info
+                comparisonHtml += `<div class="model-info">`;
+
+                if (prediction.model_version) {
+                    // REMOVED lookup and display of modelInfo.name and modelInfo.description
+                    comparisonHtml += `<div>Model Ver: ${prediction.model_version}`;
+                    const modelVariant = MODEL_VERSION_INFO[prediction.model_version]?.variant;
+                    if (modelVariant && modelVariant !== "standard") {
+                         comparisonHtml += ` <strong>${modelVariant}</strong>`;
+                     }
+                    comparisonHtml += `</div>`;
+
+                    comparisonHtml += `<div style="font-size: 0.9em; font-weight: normal; margin-top: 3px;">`;
+                    // comparisonHtml += `Model: ${prediction.model_version} `; // Redundant, kept version above
+
+                    if (prediction.prompt_version) {
+                        const promptInfo = PROMPT_VERSION_INFO[prediction.prompt_version] || "Unknown";
+                        comparisonHtml += `Prompt: v${prediction.prompt_version}`;
+                        comparisonHtml += `<div style="font-style: italic; font-size: 0.9em;">${promptInfo}</div>`;
+                    }
+
+                    comparisonHtml += `</div>`;
+                } else {
+                    comparisonHtml += `<div>${versionKey}</div>`;
+                }
+
+                comparisonHtml += `</div>`;
+                
+                // Final prediction with match indicator
+                comparisonHtml += `<div><strong>Final Prediction:</strong> `;
+                const finalPred = prediction.final_prediction || prediction.prediction;
+                
+                if (prediction.ground_truth && finalPred) {
+                    // Always compute match directly by comparing values
+                    const actuallyMatches = finalPred === prediction.ground_truth;
+                    const matchClass = actuallyMatches ? 'prediction-match' : 'prediction-mismatch';
+                    comparisonHtml += `<span class="${matchClass}">${finalPred} `;
+                    comparisonHtml += actuallyMatches ? 
+                        '<span style="color: #4caf50 !important; font-weight: bold;">✓</span>' : 
+                        '<span style="color: #f44336 !important; font-weight: bold;">✗</span>';
+                    comparisonHtml += `</span>`;
+                } else {
+                    comparisonHtml += finalPred;
+                }
+                comparisonHtml += `</div>`;
+                
+                // Raw prediction if available
+                if (prediction.raw_prediction) {
+                    comparisonHtml += `<div><strong>Raw Prediction:</strong> `;
+                    if (prediction.ground_truth && prediction.raw_prediction) {
+                        // Always compute match directly by comparing values
+                        const actuallyMatches = prediction.raw_prediction === prediction.ground_truth;
+                        const matchClass = actuallyMatches ? 'prediction-match' : 'prediction-mismatch';
+                        comparisonHtml += `<span class="${matchClass}">${prediction.raw_prediction} `;
+                        comparisonHtml += actuallyMatches ? 
+                            '<span style="color: #4caf50 !important; font-weight: bold;">✓</span>' : 
+                            '<span style="color: #f44336 !important; font-weight: bold;">✗</span>';
+                        comparisonHtml += `</span>`;
+                    } else {
+                        comparisonHtml += prediction.raw_prediction;
+                    }
+                    comparisonHtml += `</div>`;
+                }
+                
+                // Attribution (shortened for comparison view)
+                if (prediction.attribution) {
+                    let attributionItems = [];
+                    
+                    try {
+                        if (typeof prediction.attribution === 'string') {
+                            const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                            attributionItems = JSON.parse(cleanedAttr);
+                        } else if (Array.isArray(prediction.attribution)) {
+                            attributionItems = prediction.attribution;
+                        }
+                    } catch (e) {
+                        attributionItems = [prediction.attribution];
+                    }
+                    
+                    comparisonHtml += `<div><strong>Attribution:</strong> `;
+                    
+                    if (Array.isArray(attributionItems)) {
+                        // Just show the first two items for brevity
+                        const displayItems = attributionItems.slice(0, 2);
+                        displayItems.forEach((item, idx) => {
+                            comparisonHtml += `<div class="attribution-item">${item}</div>`;
+                        });
+                        
+                        if (attributionItems.length > 2) {
+                            comparisonHtml += `<div>... and ${attributionItems.length - 2} more</div>`;
+                        }
+                    } else {
+                        comparisonHtml += `<div class="attribution-item">${attributionItems}</div>`;
+                    }
+                    
+                    comparisonHtml += `</div>`;
+                }
+                
+                comparisonHtml += `</div>`;
+            });
             
-            // Simply preserve line breaks without any header detection or formatting
-            let formattedText = text.replace(/\n/g, '<br>');
+            comparisonHtml += '</div>';
             
-            // No header detection or formatting - just return the text with line breaks
-            return formattedText;
+            // Add ground truth for reference
+            if (versionKeys.length > 0 && versionPredictions[versionKeys[0]] && versionPredictions[versionKeys[0]][0]) {
+                const prediction = versionPredictions[versionKeys[0]][0];
+                if (prediction.ground_truth) {
+                    comparisonHtml += `<div style="margin-top: 15px;"><strong>Ground Truth:</strong> ${prediction.ground_truth}</div>`;
+                }
+            }
+            
+            predictionInfo.innerHTML = comparisonHtml;
+            
+            // Show ranking UI in comparison mode
+            document.querySelector('.validation-controls').style.display = 'none';
+            document.querySelector('.ranking-controls').style.display = 'block';
+            setupRankingUI();
         }
 
-        // Show previous detail
-        function showPreviousDetail() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                showPredictionDetails(currentIndex);
-            }
-        }
-        
-        // Show next detail
-        function showNextDetail() {
-            const maxIndex = predictionsData.length - 1;
-            
-            if (currentIndex < maxIndex) {
-                currentIndex++;
-                showPredictionDetails(currentIndex);
-            }
-        }
-        
-        // Update the prediction counter
-        function updatePredictionCounter(index) {
-            const counterElement = document.getElementById('predictionCounter');
-            counterElement.textContent = `Prediction ${index + 1} of ${predictionsData.length}`;
-        }
+        // Modify the renderVersionTabs function to update validation UI when switching tabs and respect filter
+        function renderVersionTabs() {
+            const tabsContainer = document.getElementById('versionTabs');
+            tabsContainer.innerHTML = '';
 
-        // Validation functions
-        function setValidation(result) {
-            // Update the UI for the selected option
-            resetValidationUI();
-            currentValidationChoice = result;
-            
-            if (result === 'valid') {
-                validButton.classList.add('selected');
-                invalidReasons.style.display = 'none';
-                currentInvalidReason = null;
-                // Reset any selected radio buttons
-                document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
-                    radio.checked = false;
+             // Determine which keys to display based on filter
+             const keysToDisplay = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+             // Filter out 'compare' key temporarily for individual tab generation
+             const actualKeysForTabs = keysToDisplay.filter(key => key !== 'compare');
+
+            // Only include version keys that have prediction data
+            const versionsWithPredictions = actualKeysForTabs.filter(versionKey => 
+                versionPredictions[versionKey] && versionPredictions[versionKey].length > 0
+            );
+
+            // If we have multiple versions *to display*, show tabs
+            if (versionsWithPredictions.length > 1 || (versionsWithPredictions.length === 1 && keysToDisplay.includes('compare'))) {
+                 tabsContainer.style.display = 'flex'; // Show tabs container
+
+                // Add individual version tabs for *displayed keys with predictions*
+                versionsWithPredictions.forEach(versionKey => {
+                    // No need to check for 'compare' here as it's already filtered
+
+                    const tab = document.createElement('div');
+                    tab.className = 'version-tab' + (versionKey === currentVersionKey ? ' active' : '');
+
+                    // Get first prediction from this version to extract model/prompt info
+                    const prediction = versionPredictions[versionKey]?.[0];
+                    let tabLabel = versionKey;
+
+                    if (prediction && prediction.model_version) {
+                        // REMOVED lookup of modelInfo.name
+                        const promptVersion = prediction.prompt_version || "unknown";
+                        const modelVariant = MODEL_VERSION_INFO[prediction.model_version]?.variant;
+
+                        // Create label without model name
+                        if (modelVariant && modelVariant !== "standard") {
+                            tabLabel = `Ver: ${prediction.model_version} ${modelVariant} / v${promptVersion}`;
+                        } else {
+                            tabLabel = `Ver: ${prediction.model_version} / v${promptVersion}`;
+                        }
+                    }
+
+                    tab.textContent = tabLabel;
+                    tab.dataset.versionKey = versionKey;
+                    tab.title = versionKey; // Add the raw version key as a tooltip
+                    
+                    tab.addEventListener('click', function() {
+                        // Update active tab
+                        document.querySelectorAll('.version-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Update current version
+                        currentVersionKey = this.dataset.versionKey;
+                        
+                        // Update prediction display
+                        displayVersionPrediction(currentVersionKey);
+                        
+                        // Update validation state for this version
+                        updateVersionSpecificUI();
+                    });
+                    
+                    tabsContainer.appendChild(tab);
                 });
+
+                // Add "Compare All" tab only if it's in the keysToDisplay (meaning not filtered out OR filter is off)
+                // and if there are multiple actual versions with predictions available globally to compare
+                const globalVersionsWithPredictions = versionKeys.filter(k => 
+                    k !== 'compare' && versionPredictions[k] && versionPredictions[k].length > 0
+                );
+                
+                if (keysToDisplay.includes('compare') && globalVersionsWithPredictions.length > 1) {
+                    const compareTab = document.createElement('div');
+                    compareTab.className = 'version-tab' + (currentVersionKey === 'compare' ? ' active' : '');
+                    compareTab.textContent = 'Compare All';
+                    compareTab.dataset.versionKey = 'compare';
+
+                    compareTab.addEventListener('click', function() {
+                        // Update active tab
+                        document.querySelectorAll('.version-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+
+                        // Update current version
+                        currentVersionKey = 'compare';
+
+                        // Display comparison view (which now respects filters internally)
+                        displayComparisonView();
+                        // Update UI for compare mode (disable validation, enable ranking)
+                        updateVersionSpecificUI();
+                    });
+
+                    tabsContainer.appendChild(compareTab);
+                }
             } else {
-                invalidButton.classList.add('selected');
-                invalidReasons.style.display = 'block';
-            }
-            
-            updateSubmitButton();
-        }
-        
-        function submitValidationResult() {
-            // Store the validation result along with the comment and invalid reason if applicable
-            const prediction = predictionsData[currentIndex];
-            if (!prediction) {
-                showStatus('No prediction found to validate.', 'error');
-                return;
-            }
-            
-            // Create validation object
-            const validationData = {
-                result: currentValidationChoice,
-                comment: commentArea.value,
-                predictionId: prediction.id || currentIndex,
-                encounterId: prediction.encounter_id,
-                timestamp: new Date().toISOString(),
-                prediction: prediction.prediction
-            };
-            
-            // Add invalid reason if applicable
-            if (currentValidationChoice === 'invalid' && currentInvalidReason) {
-                validationData.invalidReason = currentInvalidReason;
-            }
-            
-            // Store validation
-            validationResults[currentIndex] = validationData;
-            
-            // Update status
-            updateValidationStatus();
-            
-            // Provide feedback
-            showStatus(`Validation submitted successfully`, 'success');
-            
-            // Auto-advance to next prediction if not on the last one
-            const maxIndex = predictionsData.length - 1;
-            if (currentIndex < maxIndex) {
-                setTimeout(() => {
-                    showPredictionDetails(currentIndex + 1);
-                }, 750);
-            } else {
-                // On the last prediction, just disable the submit button
-                submitValidation.disabled = true;
+                tabsContainer.style.display = 'none'; // Hide tabs if only one version displayed and no compare tab
             }
         }
-        
+
+        // Helper function to update UI when switching between versions
+        function updateVersionSpecificUI() {
+            // Reset validation UI state (buttons, comments)
+            resetValidationUI(); 
+            
+            // Check if multiple versions exist
+            const versionsAvailable = versionKeys.filter(key => key !== 'compare');
+            const isMultiVersion = versionsAvailable.length > 1;
+
+            // --- Visibility/Interactivity Logic --- 
+            // Ranking controls (bottom) visibility
+            document.querySelector('.ranking-controls').style.display = isMultiVersion ? 'block' : 'none';
+            // Validation controls (right panel) container always visible
+             document.querySelector('.validation-controls').style.display = 'block';
+
+            // Adjust interactivity based on selected tab
+            if (currentVersionKey === 'compare' && isMultiVersion) {
+                // Disable validation interaction when comparing all
+                disableValidationControls();
+                // Setup ranking if switching *to* compare tab
+                setupRankingUI();
+            } else {
+                // Enable validation interaction for single version tabs
+                enableValidationControls(); 
+                // Restore validation state for the specific selected version
+                const versionValidationKey = `${currentIndex}_${currentVersionKey}`;
+                if (validationResults[versionValidationKey]) {
+                    const validation = validationResults[versionValidationKey];
+                    currentValidationChoice = validation.result;
+                    
+                    if (validation.result === 'valid') {
+                        validButton.classList.add('selected');
+                    } else {
+                        invalidButton.classList.add('selected');
+                        invalidReasons.style.display = 'block';
+                        
+                        if (validation.invalidReason) {
+                            currentInvalidReason = validation.invalidReason;
+                            const reasonInput = document.querySelector(`input[name="invalidReason"][value="${validation.invalidReason}"]`);
+                            if (reasonInput) {
+                                reasonInput.checked = true;
+                            }
+                        }
+                    }
+                    
+                    updateValidationStatus();
+                    updateSubmitButton();
+                    
+                    if (validation.comment) {
+                        commentArea.value = validation.comment;
+                    } else {
+                        commentArea.value = '';
+                    }
+                } else {
+                    commentArea.value = '';
+                }
+            }
+            
+            // Update the attribution highlighting in the notes
+            const prediction = versionPredictions[currentVersionKey]?.[0];
+            if (prediction) {
+                updateAttributionHighlighting(prediction);
+            }
+        }
+
+        // Function to update attribution highlighting when switching versions
+        function updateAttributionHighlighting(prediction) {
+            // Get the current note text
+            const noteTextElement = document.getElementById('noteText');
+            
+            // Remove all existing attribution highlights
+            let cleanedText = noteTextElement.innerHTML;
+            for (let i = 0; i < 8; i++) {
+                cleanedText = cleanedText.replace(new RegExp(`<span class="highlight-${i}">([^<]+)</span>`, 'g'), '$1');
+            }
+            
+            // Add highlighting for the current version's attribution terms
+            if (prediction.attribution) {
+                let attributionItems = [];
+                
+                try {
+                    if (typeof prediction.attribution === 'string') {
+                        // Clean up the string if it has surrounding quotes
+                        const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                        attributionItems = JSON.parse(cleanedAttr);
+                    } else if (Array.isArray(prediction.attribution)) {
+                        attributionItems = prediction.attribution;
+                    }
+                } catch (e) {
+                    // If parsing fails, use as is
+                    attributionItems = [prediction.attribution];
+                }
+                
+                if (Array.isArray(attributionItems)) {
+                    attributionItems.forEach((item, idx) => {
+                        if (item && cleanedText) {
+                            try {
+                                const colorIndex = idx % 8; // Use modulo to cycle through the 8 colors
+                                const regex = new RegExp(`(${item})`, 'gi');
+                                cleanedText = cleanedText.replace(regex, `<span class="highlight-${colorIndex}">$1</span>`);
+                            } catch (e) {
+                                // Skip invalid regex patterns
+                                console.log("Error highlighting term:", item);
+                            }
+                        }
+                    });
+                }
+            }
+            
+            noteTextElement.innerHTML = cleanedText;
+        }
+
+        // Add the missing resetValidationUI function
+        function resetValidationUI() {
+            // Clear current validation choice and reason
+            currentValidationChoice = null;
+            currentInvalidReason = null;
+            
+            // Reset button states
+            validButton.classList.remove('selected');
+            invalidButton.classList.remove('selected');
+            
+            // Hide the invalid reasons panel
+            invalidReasons.style.display = 'none';
+            
+            // Reset all radio buttons
+            document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Reset validation status
+            validationStatus.style.display = 'none';
+            
+            // Disable submit button
+            submitValidation.disabled = true;
+        }
+
+        // Add the updateSubmitButton function which is also referenced but missing
         function updateSubmitButton() {
-            // Enable submit button if a validation choice is selected and, if invalid, a reason is selected
+            // Enable submit button only if a validation choice is made
+            // For invalid choice, also require a reason to be selected
             if (currentValidationChoice === 'valid') {
                 submitValidation.disabled = false;
             } else if (currentValidationChoice === 'invalid' && currentInvalidReason) {
@@ -1234,293 +2622,345 @@
                 submitValidation.disabled = true;
             }
         }
-        
-        function resetValidationUI() {
-            // Reset button states
-            validButton.classList.remove('selected');
-            invalidButton.classList.remove('selected');
-            validationStatus.style.display = 'none';
-            submitValidation.disabled = true;
+
+        // Add the missing formatEpicStyleNote function
+        function formatEpicStyleNote(noteText) {
+            if (!noteText) return '';
+            
+            // Handle different section formats in Epic notes
+            let formattedText = noteText;
+            
+            // Replace section headers with styled headers
+            formattedText = formattedText.replace(/^([A-Z][A-Z\s]+):\s*$/gm, '<div class="note-header">$1:</div>');
+            
+            // Add basic formatting for readability
+            formattedText = formattedText.replace(/\n/g, '<br>');
+            
+            return formattedText;
         }
 
-        function saveValidationResults() {
-            // Create a CSV string from the validation results
-            const csvRows = [
-                // Header row
-                ['Index', 'Prediction ID', 'Encounter ID', 'Prediction', 'Attribution', 'Note Text', 'Note Types', 'Validation Result', 'Invalid Reason', 'Comment', 'Validation Timestamp'].join(',')
-            ];
-            
-            // Add a row for each validated prediction
-            for (const [index, validation] of Object.entries(validationResults)) {
-                const idx = parseInt(index);
-                const prediction = predictionsData[idx];
-                if (!prediction) continue;
-                
-                const result = typeof validation === 'string' ? validation : validation.result;
-                const comment = typeof validation === 'string' ? '' : (validation.comment || '').replace(/,/g, ';').replace(/\n/g, ' ');
-                const predictionId = typeof validation === 'string' ? 
-                    (prediction.id || idx) : validation.predictionId;
-                const encounterId = typeof validation === 'string' ?
-                    prediction.encounter_id : validation.encounterId;
-                const timestamp = typeof validation === 'string' ? 
-                    new Date().toISOString() : validation.timestamp;
-                
-                // Get the prediction text
-                const predictionText = prediction.prediction || '';
-                
-                // Get the attribution
-                let attributionText = '';
+        // Function to render the new multi-column comparison row (Focus on Attributions, Max 3 versions) and respect filter
+        function renderMultiColumnComparisonRow() {
+            const comparisonContainer = document.getElementById('multiColumnComparison');
+            comparisonContainer.innerHTML = ''; // Clear previous content
+
+            // Determine which keys to display based on filter
+            const keysToDisplay = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+            // Filter out 'compare' key
+            const actualKeysToCompare = keysToDisplay.filter(key => key !== 'compare');
+
+            // Limit to max 3 versions for display
+            const versionsToDisplayInColumns = actualKeysToCompare.slice(0, 3); // Limit to first 3 *filtered* versions
+
+            // Only render if we have multiple versions *to display*
+            if (actualKeysToCompare.length <= 1) {
+                comparisonContainer.style.display = 'none';
+                return;
+            }
+
+            comparisonContainer.style.display = 'flex'; // Show the container
+
+            versionsToDisplayInColumns.forEach(versionKey => {
+                const prediction = versionPredictions[versionKey]?.[0];
+                if (!prediction) return; // Skip if no prediction for this version
+
+                const column = document.createElement('div');
+                column.className = 'comparison-column';
+
+                let columnHtml = '';
+
+                // --- Column Header (Model/Prompt Info) ---
+                let headerText = versionKey;
+                if (prediction.model_version) {
+                    // REMOVED lookup of modelInfo.name
+                    const promptVersion = prediction.prompt_version || "unknown";
+                     const modelVariant = MODEL_VERSION_INFO[prediction.model_version]?.variant;
+
+                     // Create header without model name
+                    if (modelVariant && modelVariant !== "standard") {
+                        headerText = `Ver: ${prediction.model_version} ${modelVariant} / v${promptVersion}`;
+                    } else {
+                        headerText = `Ver: ${prediction.model_version} / v${promptVersion}`;
+                    }
+                }
+                columnHtml += `<h4>${headerText}</h4>`;
+
+                // --- Attribution List ---
+                columnHtml += '<p><strong>Attribution:</strong></p>';
                 if (prediction.attribution) {
+                    let attributionItems = [];
                     try {
                         if (typeof prediction.attribution === 'string') {
-                            // Clean up the string if it has surrounding quotes
                             const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
-                            const parsed = JSON.parse(cleanedAttr);
-                            attributionText = Array.isArray(parsed) ? parsed.join('; ') : String(parsed);
+                             if (cleanedAttr.startsWith('[') && cleanedAttr.endsWith(']')) {
+                                attributionItems = JSON.parse(cleanedAttr);
+                             } else {
+                                 attributionItems = [cleanedAttr]; // Treat as single item
+                             }
                         } else if (Array.isArray(prediction.attribution)) {
-                            attributionText = prediction.attribution.join('; ');
+                            attributionItems = prediction.attribution;
                         } else {
-                            attributionText = String(prediction.attribution);
+                            attributionItems = [String(prediction.attribution)];
                         }
                     } catch (e) {
-                        // If parsing fails, use as is
-                        attributionText = String(prediction.attribution);
+                        console.warn(`Error parsing attribution for ${versionKey}:`, prediction.attribution, e);
+                         attributionItems = [String(prediction.attribution).replace(/^"|"$/g, '')]; // Fallback
                     }
+
+                    if (Array.isArray(attributionItems) && attributionItems.length > 0) {
+                         columnHtml += '<ul class="attribution-list">';
+                         attributionItems.forEach(item => {
+                             const sanitizedItem = String(item).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                             columnHtml += `<li>${sanitizedItem}</li>`;
+                         });
+                         columnHtml += '</ul>';
+                    } else {
+                        columnHtml += '<p><em>No attribution data.</em></p>';
+                    }
+                } else {
+                    columnHtml += '<p><em>No attribution data.</em></p>';
                 }
-                
-                // Find relevant notes
-                const predictionDate = prediction.note_date || prediction.prediction_timestamp;
-                let relevantNotes = [];
-                let noteTypes = [];
-                let combinedNoteText = '';
-                
-                if (predictionDate && prediction.encounter_id) {
-                    // Convert to date object for comparison
-                    const predDate = new Date(predictionDate);
-                    
-                    // Filter notes by encounter_id and date
-                    relevantNotes = notesData.filter(note => {
-                        // Match by encounter ID
-                        if (note.encounter_id !== prediction.encounter_id) return false;
-                        
-                        // If note has a date, check if it's before or equal to prediction date
-                        if (note.note_date) {
-                            const noteDate = new Date(note.note_date);
-                            return noteDate <= predDate;
-                        }
-                        
-                        // If no date to compare, include it anyway
-                        return true;
-                    });
-                    
-                    // Sort by date (oldest first) if dates are available
-                    relevantNotes.sort((a, b) => {
-                        if (a.note_date && b.note_date) {
-                            return new Date(a.note_date) - new Date(b.note_date);
-                        }
-                        return 0;
-                    });
-                    
-                    // Extract note text and types
-                    relevantNotes.forEach(note => {
-                        let noteText = '';
-                        const noteType = note.note_type || note.type || 'Clinical Note';
-                        
-                        // Extract text
-                        if (note.note_text) {
-                            noteText = note.note_text;
-                        } else if (note.text) {
-                            noteText = note.text;
-                        } else if (note.anonymized_text) {
-                            noteText = note.anonymized_text;
-                        } else {
-                            // If no dedicated text field, try to identify it
-                            for (const key in note) {
-                                if (typeof note[key] === 'string' && note[key].length > 200) {
-                                    noteText = note[key];
-                                    break;
-                                }
-                            }
-                        }
-                        
-                        // Add to combined text with separator
-                        if (combinedNoteText) combinedNoteText += ' ||| ';
-                        combinedNoteText += noteText.replace(/,/g, ';').replace(/\n/g, ' ').replace(/"/g, '""');
-                        
-                        // Add note type
-                        noteTypes.push(noteType);
-                    });
-                }
-                
-                // Combine the note types
-                const combinedNoteTypes = noteTypes.join('; ');
-                
-                // Add row to CSV
-                csvRows.push([
-                    idx,
-                    predictionId,
-                    encounterId,
-                    `"${predictionText.replace(/"/g, '""')}"`,
-                    `"${attributionText.replace(/"/g, '""')}"`,
-                    `"${combinedNoteText}"`,
-                    `"${combinedNoteTypes}"`,
-                    result,
-                    typeof validation === 'string' ? '' : (validation.invalidReason || ''),
-                    `"${comment.replace(/"/g, '""')}"`,
-                    timestamp
-                ].join(','));
-            }
-            
-            const csvContent = csvRows.join('\n');
-            
-            // Create a blob and download link
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `clinical_validation_${new Date().toISOString().slice(0,10)}.csv`);
-            link.style.display = 'none';
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Show status message
-            showStatus('Validation results saved as CSV.', 'success');
+
+                column.innerHTML = columnHtml;
+                comparisonContainer.appendChild(column);
+            });
         }
 
-        function updateValidationStatus() {
-            const validation = validationResults[currentIndex];
-            const result = typeof validation === 'string' ? validation : validation?.result;
-            
-            if (result) {
-                let statusText = result === 'valid' ? 'Valid Attribution' : 'Invalid Attribution';
-                
-                // Add invalid reason to status if available
-                if (result === 'invalid' && validation.invalidReason) {
-                    let reasonText = '';
-                    switch(validation.invalidReason) {
-                        case 'hallucination':
-                            reasonText = 'Hallucination';
-                            break;
-                        case 'invalid_clinical_reasoning':
-                            reasonText = 'Invalid Clinical Reasoning';
-                            break;
-                        case 'other':
-                            reasonText = 'Other';
-                            break;
-                        default:
-                            reasonText = validation.invalidReason;
-                    }
-                    statusText += ` - Reason: ${reasonText}`;
-                }
-                
-                validationStatus.textContent = statusText;
-                validationStatus.className = 'validation-status ' + (result === 'valid' ? 'success' : 'error');
-                validationStatus.style.display = 'block';
-            } else {
-                validationStatus.style.display = 'none';
-            }
-        }
-
-        // Search function
-        function searchNotes() {
-            const searchTerm = searchInput.value.trim();
-            
-            // Get the current note text
-            const noteTextElement = document.getElementById('noteText');
-            const originalText = noteTextElement.innerHTML;
-            
-            // Remove existing search highlights first but preserve attribution highlights
-            const cleanedText = originalText.replace(/<span class="search-match">([^<]+)<\/span>/g, '$1');
-            
-            if (!searchTerm) {
-                // If no search term, just restore the text without search highlights
-                noteTextElement.innerHTML = cleanedText;
+        // Update displayVersionPrediction to fix incorrect checkmarks
+        function displayVersionPrediction(versionKey) {
+            if (!versionPredictions[versionKey] || versionPredictions[versionKey].length === 0) {
+                predictionInfo.innerHTML = '<p>No prediction data found for this version.</p>';
                 return;
             }
             
-            try {
-                // Escape special regex characters in the search term
-                const escapedSearch = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const regex = new RegExp(`(${escapedSearch})`, 'gi');
+            // Get the first prediction for this version
+            const prediction = versionPredictions[versionKey][0];
+            
+            let html = '<div class="prediction-info">';
+            
+            // Version info
+            html += `<div class="prediction-title">Version: ${versionKey}</div>`;
+            if (prediction.model_version) {
+                 // REMOVED lookup and display of modelInfo.name and modelInfo.description
+                 html += `<div><strong>Model Ver:</strong> ${prediction.model_version}`;
+                 const modelVariant = MODEL_VERSION_INFO[prediction.model_version]?.variant;
+                 if (modelVariant && modelVariant !== "standard") {
+                     html += ` - <span style="color: #3949ab; font-weight: bold;">${modelVariant} variant</span>`;
+                 }
+                 html += `</div>`;
+                // html += `<div><em>${modelInfo.description}</em></div>`; // REMOVED description
+            }
+
+            if (prediction.prompt_version) {
+                const promptInfo = PROMPT_VERSION_INFO[prediction.prompt_version] || "Unknown prompt version";
+                html += `<div><strong>Prompt:</strong> Version ${prediction.prompt_version}</div>`;
+                html += `<div><em>${promptInfo}</em></div>`;
+            }
+            
+            // Prediction info
+            html += `<div><strong>Encounter ID:</strong> ${prediction.encounter_id}</div>`;
+            html += `<div><strong>Note Date:</strong> ${prediction.note_date || 'N/A'}</div>`;
+            
+            // Ground truth if available
+            if (prediction.ground_truth) {
+                html += `<div><strong>Ground Truth:</strong> ${prediction.ground_truth}</div>`;
+            }
+            
+            // Raw prediction (binary model)
+            if (prediction.raw_prediction) {
+                html += '<div class="raw-prediction">';
+                html += `<div><strong>Raw Prediction:</strong> ${prediction.raw_prediction}`;
                 
-                // Highlight search matches, carefully handling spans that might already exist
-                let highlightedText = cleanedText;
+                // Only add checkmark if we know whether it matches ground truth
+                if (prediction.ground_truth && prediction.raw_prediction) {
+                    const matches = prediction.raw_prediction === prediction.ground_truth;
+                    html += matches ? ' <span style="color: #4caf50;">✓</span>' : ' <span style="color: #f44336;">✗</span>';
+                }
+                html += `</div>`;
                 
-                // Function to process text nodes only (not inside existing spans)
-                function replaceTextWithinNode(text) {
-                    return text.replace(regex, '<span class="search-match">$1</span>');
+                if (prediction.raw_confidence) {
+                    html += `<div><strong>Raw Confidence:</strong> ${prediction.raw_confidence}</div>`;
                 }
                 
-                // Create a temporary DOM element to apply complex replacements
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = cleanedText;
+                if (prediction.raw_prediction_matches_ground_truth !== undefined) {
+                    // Verify if the match is actually correct by comparing values
+                    const actuallyMatches = prediction.ground_truth && prediction.raw_prediction === prediction.ground_truth;
+                    const matchClass = actuallyMatches ? 'prediction-match' : 'prediction-mismatch';
+                    html += `<div><strong>Matches Ground Truth:</strong> <span class="${matchClass}">`;
+                    html += actuallyMatches ? 
+                        'Yes <span style="color: #4caf50;">✓</span>' : 'No <span style="color: #f44336;">✗</span>';
+                    html += '</span></div>';
+                } else if (prediction.ground_truth && prediction.raw_prediction) {
+                    // If we don't have the explicit match flag but have both values, compute it
+                    const matches = prediction.raw_prediction === prediction.ground_truth;
+                    const matchClass = matches ? 'prediction-match' : 'prediction-mismatch';
+                    html += `<div><strong>Matches Ground Truth:</strong> <span class="${matchClass}">`;
+                    html += matches ? 'Yes <span style="color: #4caf50;">✓</span>' : 'No <span style="color: #f44336;">✗</span>';
+                    html += '</span></div>';
+                }
+                html += '</div>';
+            }
+            
+            // Final prediction
+            html += '<div class="final-prediction">';
+            html += `<div><strong>Final Prediction:</strong> ${prediction.final_prediction || prediction.prediction}`;
+            
+            // Only add checkmark if we know whether it matches ground truth
+            if (prediction.ground_truth && (prediction.final_prediction || prediction.prediction)) {
+                const finalPred = prediction.final_prediction || prediction.prediction;
+                const matches = finalPred === prediction.ground_truth;
+                html += matches ? ' <span style="color: #4caf50;">✓</span>' : ' <span style="color: #f44336;">✗</span>';
+            }
+            html += `</div>`;
+            
+            if (prediction.final_confidence || prediction.confidence) {
+                html += `<div><strong>Final Confidence:</strong> ${prediction.final_confidence || prediction.confidence}</div>`;
+            }
+            
+            if (prediction.final_prediction_matches_ground_truth !== undefined) {
+                // Verify if the match is actually correct by comparing values
+                const finalPred = prediction.final_prediction || prediction.prediction;
+                const actuallyMatches = prediction.ground_truth && finalPred === prediction.ground_truth;
+                const matchClass = actuallyMatches ? 'prediction-match' : 'prediction-mismatch';
+                html += `<div><strong>Matches Ground Truth:</strong> <span class="${matchClass}">`;
+                html += actuallyMatches ? 
+                    'Yes <span style="color: #4caf50;">✓</span>' : 'No <span style="color: #f44336;">✗</span>';
+                html += '</span></div>';
+            } else if (prediction.ground_truth && (prediction.final_prediction || prediction.prediction)) {
+                // If we don't have the explicit match flag but have both values, compute it
+                const finalPred = prediction.final_prediction || prediction.prediction;
+                const matches = finalPred === prediction.ground_truth;
+                const matchClass = matches ? 'prediction-match' : 'prediction-mismatch';
+                html += `<div><strong>Matches Ground Truth:</strong> <span class="${matchClass}">`;
+                html += matches ? 'Yes <span style="color: #4caf50;">✓</span>' : 'No <span style="color: #f44336;">✗</span>';
+                html += '</span></div>';
+            }
+            html += '</div>';
+            
+            // Attribution
+            if (prediction.attribution) {
+                let attributionItems = [];
                 
-                // Process the DOM tree to find text nodes
-                const walk = document.createTreeWalker(
-                    tempDiv,
-                    NodeFilter.SHOW_TEXT,
-                    null,
-                    false
-                );
-                
-                const nodesToReplace = [];
-                let currentNode;
-                
-                // Collect nodes that need replacement
-                while (currentNode = walk.nextNode()) {
-                    if (regex.test(currentNode.nodeValue)) {
-                        nodesToReplace.push(currentNode);
+                try {
+                    if (typeof prediction.attribution === 'string') {
+                        const cleanedAttr = prediction.attribution.replace(/^"|"$/g, '');
+                        attributionItems = JSON.parse(cleanedAttr);
+                    } else if (Array.isArray(prediction.attribution)) {
+                        attributionItems = prediction.attribution;
                     }
+                } catch (e) {
+                    attributionItems = [prediction.attribution];
                 }
                 
-                // Apply replacements
-                nodesToReplace.forEach(node => {
-                    const newContent = replaceTextWithinNode(node.nodeValue);
-                    const newSpan = document.createElement('span');
-                    newSpan.innerHTML = newContent;
-                    node.parentNode.replaceChild(newSpan, node);
-                });
+                html += '<div><strong>Attribution:</strong></div><div>';
                 
-                // Get the processed HTML
-                highlightedText = tempDiv.innerHTML;
-                noteTextElement.innerHTML = highlightedText;
-                
-                // Count matches - this is approximate since we aren't just doing a simple replace now
-                const matchCount = nodesToReplace.length;
-                
-                if (matchCount > 0) {
-                    showStatus(`Found matches for "${searchTerm}"`, 'success');
-                    
-                    // Scroll to the first match
-                    const firstMatch = noteTextElement.querySelector('.search-match');
-                    if (firstMatch) {
-                        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                if (Array.isArray(attributionItems)) {
+                    attributionItems.forEach((item, idx) => {
+                        html += `<div class="attribution-item">${item}</div>`;
+                    });
                 } else {
-                    showStatus(`No matches found for "${searchTerm}"`, 'error');
+                    html += `<div class="attribution-item">${attributionItems}</div>`;
                 }
-            } catch (e) {
-                // In case of invalid regex
-                showStatus(`Search error: ${e.message}`, 'error');
-                noteTextElement.innerHTML = cleanedText;
+                
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            
+            predictionInfo.innerHTML = html;
+        }
+
+        // Set validation status and update UI
+        function setValidation(status) {
+            // Update current choice
+            currentValidationChoice = status;
+            
+            // Update UI
+            if (status === 'valid') {
+                validButton.classList.add('selected');
+                invalidButton.classList.remove('selected');
+                invalidReasons.style.display = 'none';
+                currentInvalidReason = null;
+            } else {
+                validButton.classList.remove('selected');
+                invalidButton.classList.add('selected');
+                invalidReasons.style.display = 'block';
+                
+                // Don't reset currentInvalidReason to maintain state when toggling
+            }
+            
+            // Check if radio button is selected for invalid
+            if (status === 'invalid') {
+                const checkedReason = document.querySelector('input[name="invalidReason"]:checked');
+                if (checkedReason) {
+                    currentInvalidReason = checkedReason.value;
+                }
+            }
+            
+            // Update submit button state
+            updateSubmitButton();
+        }
+
+        // Function to search in notes
+        function searchNotes() {
+            const searchTerm = searchInput.value.trim();
+            if (!searchTerm) return;
+            
+            const noteTextElement = document.getElementById('noteText');
+            let content = noteTextElement.innerHTML;
+            
+            // Remove any existing search highlights
+            content = content.replace(/<mark class="search-match">([^<]+)<\/mark>/g, '$1');
+            
+            // Add new search highlights, but preserve existing attribution highlights
+            if (searchTerm.length > 0) {
+                const regex = new RegExp(`(${searchTerm})(?![^<]*>)`, 'gi');
+                content = content.replace(regex, '<mark class="search-match">$1</mark>');
+            }
+            
+            noteTextElement.innerHTML = content;
+            
+            // Scroll to first match
+            const firstMatch = noteTextElement.querySelector('.search-match');
+            if (firstMatch) {
+                firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
-        // Clear search function
+        // Function to clear search results
         function clearSearch() {
-            // Clear the search input
             searchInput.value = '';
             
-            // Call search with empty term to clear highlights
-            searchNotes();
+            const noteTextElement = document.getElementById('noteText');
+            let content = noteTextElement.innerHTML;
             
-            // Set focus back to the search input
-            searchInput.focus();
+            // Remove search highlights
+            content = content.replace(/<mark class="search-match">([^<]+)<\/mark>/g, '$1');
             
-            // Show status message
-            showStatus('Search cleared', 'info');
+            noteTextElement.innerHTML = content;
+        }
+
+        // Helper functions to disable/enable validation controls
+        function disableValidationControls() {
+            validButton.disabled = true;
+            invalidButton.disabled = true;
+            commentArea.disabled = true;
+            submitValidation.disabled = true;
+            document.querySelectorAll('input[name="invalidReason"]').forEach(radio => radio.disabled = true);
+            // Optionally add a visual cue, like opacity
+            document.querySelector('.validation-controls').style.opacity = 0.6;
+            document.querySelector('.validation-controls .validation-title').textContent = 'Clinical Validation (Select a specific version tab to validate)';
+        }
+
+        function enableValidationControls() {
+            validButton.disabled = false;
+            invalidButton.disabled = false;
+            commentArea.disabled = false;
+            // submitValidation disable state is handled by updateSubmitButton()
+            updateSubmitButton(); 
+            document.querySelectorAll('input[name="invalidReason"]').forEach(radio => radio.disabled = false);
+            document.querySelector('.validation-controls').style.opacity = 1;
+            document.querySelector('.validation-controls .validation-title').textContent = 'Clinical Validation';
         }
     </script>
   </body>
