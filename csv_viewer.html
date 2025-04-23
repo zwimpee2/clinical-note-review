@@ -1000,25 +1000,49 @@
             // Reset indices
             filteredPredictionIndices = [];
             currentFilteredIndex = 0;
-            
-            // Create a unique key map to avoid duplicates
-            const uniqueKeys = new Map();
-            
-            // Filter predictions
+            nextFilteredIndex = 0; // Also reset this
+
+            // Step 1: Group predictions by unique key (encounter_id + note_date)
+            const predictionsByUniqueKey = new Map();
             predictionsData.forEach((prediction, index) => {
-                const matchesModelFilter = selectedVersionKeys.length === 0 || selectedVersionKeys.some(vKey => prediction.version_key === vKey);
-                
-                if (matchesModelFilter) {
-                    // Use encounter_id and note_date as unique key
-                    const uniqueKey = `${prediction.encounter_id}_${prediction.note_date}`;
-                    
-                    // Only add first match for each unique key
-                    if (!uniqueKeys.has(uniqueKey)) {
-                        uniqueKeys.set(uniqueKey, true);
-                        filteredPredictionIndices.push(index);
-                    }
+                const uniqueKey = `${prediction.encounter_id}_${prediction.note_date}`;
+                if (!predictionsByUniqueKey.has(uniqueKey)) {
+                    predictionsByUniqueKey.set(uniqueKey, { predictions: [], originalIndex: -1 });
+                }
+                const group = predictionsByUniqueKey.get(uniqueKey);
+                group.predictions.push(prediction);
+                // Store the index of the first prediction encountered for this key
+                if (group.originalIndex === -1) {
+                    group.originalIndex = index;
                 }
             });
+
+            // Step 2: Filter groups based on the presence of selectedVersionKeys
+            predictionsByUniqueKey.forEach((groupData, uniqueKey) => {
+                // Get the set of version keys present in this group
+                const groupVersionKeys = new Set(groupData.predictions.map(p => p.version_key));
+                
+                // Count how many of the selectedVersionKeys are present in this group
+                let matchCount = 0;
+                selectedVersionKeys.forEach(selectedKey => {
+                    if (groupVersionKeys.has(selectedKey)) {
+                        matchCount++;
+                    }
+                });
+
+                // Step 3: Add index if at least two selected versions are present
+                // Important: Check if selectedVersionKeys is actually populated (filter is active)
+                if (selectedVersionKeys.length > 0 && matchCount >= 2) { 
+                    // Add the original index of the first prediction encountered for this valid group
+                    filteredPredictionIndices.push(groupData.originalIndex);
+                } else if (selectedVersionKeys.length === 0) {
+                    // If no filter is active, include all unique items (original behavior for unfiltered)
+                    filteredPredictionIndices.push(groupData.originalIndex);
+                }
+            });
+
+            // Sort indices to maintain original order (optional but good practice)
+            filteredPredictionIndices.sort((a, b) => a - b);
             
             return filteredPredictionIndices;
         }
@@ -1386,9 +1410,10 @@
                 // Restore & Enable validation state ONLY if a single version is displayed
                 enableValidationControls(); // Ensure controls are interactive for single version view
                 // No need to check isMultiVersion here, as this 'else' block only runs for single version cases (or no versions)
-                const versionValidationKey = `${currentIndex}_${currentVersionKey}`;
-                if (validationResults[versionValidationKey]) {
-                    const validation = validationResults[versionValidationKey];
+                // FIX: Use the stable key format for retrieval
+                const stableValidationKey = `validation_${currentEncounterId}_${currentNoteDate}_${currentVersionKey}`;
+                if (validationResults[stableValidationKey]) { // Use stable key
+                    const validation = validationResults[stableValidationKey]; // Use stable key
                     currentValidationChoice = validation.result;
                     
                     if (validation.result === 'valid') {
@@ -1445,13 +1470,17 @@
             const rankingContainer = document.getElementById('rankingContainer');
             rankingContainer.innerHTML = '';
 
-            // Determine which keys to display based on filter
-            const keysToDisplay = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+            // Determine the initial set of keys based on filter
+            const initialKeys = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
 
-            // Filter out 'compare' key if present
-            const actualKeysToRank = keysToDisplay.filter(key => key !== 'compare');
+            // Filter out 'compare' key AND keys not actually present for this item
+            const actualKeysToRank = initialKeys.filter(key => 
+                key !== 'compare' && 
+                versionPredictions[key] && 
+                versionPredictions[key].length > 0
+            );
 
-            // Only show ranking if there are multiple versions *to display*
+            // Only show ranking if there are multiple versions *to display* after filtering
             if (actualKeysToRank.length <= 1) {
                  // Optionally hide the whole ranking section or just show a message
                  // rankingContainer.innerHTML = '<p>Ranking requires at least two versions to compare.</p>';
@@ -1668,21 +1697,27 @@
 
         // Function to check if we should auto-advance to the next prediction
         function shouldAutoAdvance() {
-            // Determine the set of version keys we are currently concerned with (filtered or all)
-            const keysToCheck = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
-            const actualKeysToCheck = keysToCheck.filter(key => key !== 'compare');
+            // Determine the initial set of keys based on filter
+            const initialKeys = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+            
+            // Filter out 'compare' key AND keys not actually present for this item
+            const actualKeysToCheck = initialKeys.filter(key => 
+                key !== 'compare' && 
+                versionPredictions[key] && 
+                versionPredictions[key].length > 0
+            );
 
-            // If no actual keys to check, something is wrong, don't advance
+            // If no actual keys to check (e.g., error state or only 'compare' was relevant), don't advance
             if (actualKeysToCheck.length === 0) {
-                 return false;
-             }
+                return false;
+            }
 
-             // Check if ranking is required and submitted
-             let rankingComplete = true;
-             if (actualKeysToCheck.length > 1) { // Ranking only needed if >1 version is displayed
-                 const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
-                 rankingComplete = rankingKey in validationResults;
-             }
+            // Check if ranking is required and submitted
+            let rankingComplete = true;
+            if (actualKeysToCheck.length > 1) { // Ranking only needed if >1 version is displayed
+                const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
+                rankingComplete = rankingKey in validationResults;
+            }
 
             // Check if all *displayed* versions have been validated
             let allVersionsValidated = true;
@@ -2498,9 +2533,10 @@
                 // Enable validation interaction for single version tabs
                 enableValidationControls(); 
                 // Restore validation state for the specific selected version
-                const versionValidationKey = `${currentIndex}_${currentVersionKey}`;
-                if (validationResults[versionValidationKey]) {
-                    const validation = validationResults[versionValidationKey];
+                // FIX: Use the stable key format for retrieval
+                const stableValidationKey = `validation_${currentEncounterId}_${currentNoteDate}_${currentVersionKey}`;
+                if (validationResults[stableValidationKey]) { // Use stable key
+                    const validation = validationResults[stableValidationKey]; // Use stable key
                     currentValidationChoice = validation.result;
                     
                     if (validation.result === 'valid') {
@@ -2644,16 +2680,22 @@
             const comparisonContainer = document.getElementById('multiColumnComparison');
             comparisonContainer.innerHTML = ''; // Clear previous content
 
-            // Determine which keys to display based on filter
-            const keysToDisplay = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
-            // Filter out 'compare' key
-            const actualKeysToCompare = keysToDisplay.filter(key => key !== 'compare');
+            // Determine the initial set of keys based on filter
+            const initialKeys = selectedVersionKeys.length > 0 ? selectedVersionKeys : versionKeys;
+            
+            // Filter out 'compare' key AND keys not actually present for this item
+            const actualKeysToCompare = initialKeys.filter(key => 
+                key !== 'compare' && 
+                versionPredictions[key] && 
+                versionPredictions[key].length > 0
+            );
 
-            // Limit to max 3 versions for display
-            const versionsToDisplayInColumns = actualKeysToCompare.slice(0, 3); // Limit to first 3 *filtered* versions
+            // Limit to max 3 versions for display (if needed - consider removing this limit if filter handles it)
+            // const versionsToDisplayInColumns = actualKeysToCompare.slice(0, 3); // Consider if still needed
+            const versionsToDisplayInColumns = actualKeysToCompare; // Use all valid keys after filtering
 
-            // Only render if we have multiple versions *to display*
-            if (actualKeysToCompare.length <= 1) {
+            // Only render if we have multiple versions *to display* after filtering
+            if (versionsToDisplayInColumns.length <= 1) {
                 comparisonContainer.style.display = 'none';
                 return;
             }
