@@ -1367,11 +1367,11 @@
         function displayPredictionDetails(prediction) {
             // Reset validation UI (buttons, comments, etc.)
             resetValidationUI();
-            
+
             // Clear current validation state
             currentValidationChoice = null;
             currentInvalidReason = null;
-            
+
             // Reset invalid reason radio buttons
             document.querySelectorAll('input[name="invalidReason"]').forEach(radio => {
                 radio.checked = false;
@@ -1380,19 +1380,34 @@
             // Determine if we are in a multi-version scenario for this encounter/note date
             const versionsAvailable = versionKeys.filter(key => key !== 'compare'); // Get actual versions
             const isMultiVersion = versionsAvailable.length > 1;
+            const isFilterActive = selectedVersionKeys.length > 0; // Check if filter is active
 
-            // --- Visibility Logic --- 
-            // Ranking controls (bottom) are shown only if multiple versions exist
-            document.querySelector('.ranking-controls').style.display = isMultiVersion ? 'block' : 'none';
-            if (isMultiVersion) {
-                setupRankingUI(); // Set up ranking UI if needed
+            // --- Visibility Logic ---
+            const rankingControls = document.querySelector('.ranking-controls');
+            const comparisonRow = document.getElementById('multiColumnComparison');
+
+            // Default to hidden
+            if (rankingControls) rankingControls.style.display = 'none';
+            if (comparisonRow) comparisonRow.style.display = 'none';
+
+            // Show Ranking ONLY if filter is active AND multiple versions exist for this item
+            if (isFilterActive && isMultiVersion) {
+                if (rankingControls) rankingControls.style.display = 'block';
+                setupRankingUI(); // Set up ranking UI (it has its own internal checks now too)
             }
 
-            // Validation controls (right panel) container is always visible, 
-            // interactivity depends on the selected tab (handled below and in updateVersionSpecificUI)
-            document.querySelector('.validation-controls').style.display = 'block'; 
+            // Show Multi-Column Comparison Row ONLY if filter is active AND multiple versions exist
+             if (isFilterActive && isMultiVersion) {
+                 if (comparisonRow) comparisonRow.style.display = 'flex'; // Use flex for row layout
+                 renderMultiColumnComparisonRow(); // Render the content (it also has internal checks)
+             }
+            // --- End Visibility Logic ---
 
-            // --- Display Content --- 
+            // Validation controls (right panel) container is always visible,
+            // interactivity depends on the selected tab (handled below and in updateVersionSpecificUI)
+            document.querySelector('.validation-controls').style.display = 'block';
+
+            // --- Display Content ---
             if (currentVersionKey === 'compare' && isMultiVersion) {
                 displayComparisonView(); // Show comparison in right panel if 'Compare All' is selected
                 // Disable validation interaction when comparing all
@@ -1406,22 +1421,20 @@
 
                 // Display the selected single version prediction
                 displayVersionPrediction(currentVersionKey);
-                
+
                 // Restore & Enable validation state ONLY if a single version is displayed
                 enableValidationControls(); // Ensure controls are interactive for single version view
-                // No need to check isMultiVersion here, as this 'else' block only runs for single version cases (or no versions)
-                // FIX: Use the stable key format for retrieval
                 const stableValidationKey = `validation_${currentEncounterId}_${currentNoteDate}_${currentVersionKey}`;
                 if (validationResults[stableValidationKey]) { // Use stable key
                     const validation = validationResults[stableValidationKey]; // Use stable key
                     currentValidationChoice = validation.result;
-                    
+
                     if (validation.result === 'valid') {
                         validButton.classList.add('selected');
                     } else {
                         invalidButton.classList.add('selected');
                         invalidReasons.style.display = 'block';
-                        
+
                         if (validation.invalidReason) {
                             currentInvalidReason = validation.invalidReason;
                             const reasonInput = document.querySelector(`input[name="invalidReason"][value="${validation.invalidReason}"]`);
@@ -1430,10 +1443,10 @@
                             }
                         }
                     }
-                    
+
                     updateValidationStatus();
                     updateSubmitButton();
-                    
+
                     if (validation.comment) {
                         commentArea.value = validation.comment;
                     } else {
@@ -1443,26 +1456,11 @@
                     commentArea.value = '';
                 }
             }
-            
+
             // Find all matching notes up to the prediction date and display them
             showNotesForPrediction(prediction);
 
-            // --- Conditionally show/hide comparison and ranking based on filter state --- 
-            const isFilterActive = selectedVersionKeys.length > 0;
-            const comparisonRow = document.getElementById('multiColumnComparison');
-            const rankingControls = document.querySelector('.ranking-controls');
-
-            if (isFilterActive) {
-                 // If filter is active, render the comparison row and ranking UI
-                 // The functions themselves will handle hiding if only 1 version is filtered
-                 renderMultiColumnComparisonRow();
-                 setupRankingUI(); 
-             } else {
-                 // If no filter is active, hide these sections
-                 if (comparisonRow) comparisonRow.style.display = 'none';
-                 if (rankingControls) rankingControls.style.display = 'none';
-             }
-            // --- End Conditional Display --- 
+            // REMOVED visibility logic from here as it's handled above now
         }
 
         // Add a function to set up the ranking UI
@@ -1566,24 +1564,54 @@
             
             // Restore previous ranking if available
             const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
-            if (validationResults[rankingKey]) {
-                const savedRanking = validationResults[rankingKey];
+            const rankingsList = validationResults[rankingKey]; // This is now a list
+
+            // Check if rankingsList is a non-empty array
+            if (Array.isArray(rankingsList) && rankingsList.length > 0) {
+                // Get the LAST saved ranking object
+                const lastRanking = rankingsList[rankingsList.length - 1];
+
+                // --- Simplified Restoration Logic ---
+                if (lastRanking && Array.isArray(lastRanking.order)) {
+                    const savedOrder = lastRanking.order;
+                    const rankItems = Array.from(rankList.children); // Get the currently displayed items
+
+                    // Sort the items based on the savedOrder
+                    rankItems.sort((a, b) => {
+                        const keyA = a.dataset.versionKey;
+                        const keyB = b.dataset.versionKey;
+                        const indexA = savedOrder.indexOf(keyA);
+                        const indexB = savedOrder.indexOf(keyB);
+
+                        // If both are in savedOrder, sort by their index
+                        if (indexA !== -1 && indexB !== -1) {
+                            return indexA - indexB;
+                        }
+                        // If only A is in savedOrder, A comes first
+                        if (indexA !== -1) {
+                            return -1;
+                        }
+                        // If only B is in savedOrder, B comes first
+                        if (indexB !== -1) {
+                            return 1;
+                        }
+                        // If neither are in savedOrder, maintain original relative order (or sort alphabetically?)
+                        // Let's maintain relative order for simplicity (stable sort behavior not guaranteed, but often works)
+                        return 0; 
+                    });
+
+                    // Clear the list and re-append in the sorted order
+                    rankList.innerHTML = '';
+                    rankItems.forEach(item => rankList.appendChild(item));
+                }
+                // --- End Simplified Restoration Logic ---
                 
-                // Sort the rank items according to saved ranking
-                const rankItems = Array.from(rankList.querySelectorAll('.rank-item'));
-                const sortedItems = [];
-                
-                savedRanking.order.forEach(vk => {
-                    const item = rankItems.find(i => i.dataset.versionKey === vk);
-                    if (item) sortedItems.push(item);
-                });
-                
-                // Clear list and re-add in order
-                rankList.innerHTML = '';
-                sortedItems.forEach(item => rankList.appendChild(item));
-                
-                // Restore comment
-                document.getElementById('rankingComment').value = savedRanking.comment || '';
+                // Restore comment from the last ranking
+                const lastComment = lastRanking?.comment; // Use optional chaining
+                const rankingCommentElement = document.getElementById('rankingComment');
+                if (rankingCommentElement) {
+                     rankingCommentElement.value = lastComment || '';
+                 }
             }
         }
 
@@ -1637,19 +1665,40 @@
             // Get ranking comment
             const comment = document.getElementById('rankingComment').value;
             
-            // Create ranking object
-            const rankingData = {
+            // Create ranking object for this submission
+            const newRankingData = {
                 order: rankOrder,
                 comment: comment,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                filterApplied: selectedVersionKeys.length > 0 ? [...selectedVersionKeys] : null // Record filter state at time of ranking
             };
             
             // Store using a key that combines the encounter and note date
             const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
-            validationResults[rankingKey] = rankingData;
             
+            // --- CORRECTED Modification Start ---
+            // Retrieve existing list or initialize as empty array
+            let rankingsList = validationResults[rankingKey] || [];
+            
+            // Ensure it's an array (in case of old format or corruption)
+            if (!Array.isArray(rankingsList)) {
+                console.warn(`Data for ${rankingKey} was not an array. Resetting.`);
+                rankingsList = [];
+            }
+            
+            // Append the NEW ranking data to the list
+            rankingsList.push(newRankingData); 
+            
+            // Save the updated list back to validationResults
+            validationResults[rankingKey] = rankingsList; // Save the list itself
+            // --- CORRECTED Modification End ---
+            
+            // --- Debug Log: Confirm list length ---
+            console.log(`Ranking list for ${rankingKey} now has ${rankingsList.length} entries.`);
+            // --- End Debug Log ---
+
             // Provide feedback
-            showStatus(`Ranking submitted successfully`, 'success');
+            showStatus(`Ranking submitted successfully (Submission ${rankingsList.length})`, 'success');
 
             // Only auto-advance if all versions have also been validated
             if (shouldAutoAdvance()) {
@@ -1709,29 +1758,73 @@
 
             // If no actual keys to check (e.g., error state or only 'compare' was relevant), don't advance
             if (actualKeysToCheck.length === 0) {
+                console.log("Auto-advance check: No actual keys to check.");
                 return false;
             }
 
-            // Check if ranking is required and submitted
-            let rankingComplete = true;
-            if (actualKeysToCheck.length > 1) { // Ranking only needed if >1 version is displayed
-                const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
-                rankingComplete = rankingKey in validationResults;
-            }
-
-            // Check if all *displayed* versions have been validated
-            let allVersionsValidated = true;
+            // --- Check Validation Status for Displayed Versions ---
+            let allDisplayedValidated = true;
             actualKeysToCheck.forEach(versionKey => {
-                // FIX: Use the correct stable key to check validation results
-                // const versionValidationKey = `${currentIndex}_${versionKey}`; // OLD UNRELIABLE KEY
-                const validationKey = `validation_${currentEncounterId}_${currentNoteDate}_${versionKey}`; // NEW STABLE KEY
-                if (!(validationKey in validationResults)) { // Use the correct key here
-                    allVersionsValidated = false;
+                const validationKey = `validation_${currentEncounterId}_${currentNoteDate}_${versionKey}`; 
+                if (!(validationKey in validationResults)) { 
+                    console.log(`Auto-advance check: Version ${versionKey} not validated.`);
+                    allDisplayedValidated = false;
                 }
             });
 
-            // Advance if all required validations are done AND ranking is done (if required)
-            return allVersionsValidated && rankingComplete;
+            if (!allDisplayedValidated) {
+                return false; // Don't advance if not all displayed versions are validated
+            }
+            // --- End Validation Check ---
+            
+            console.log("Auto-advance check: All displayed versions validated.");
+
+            // --- Check Ranking Status (only if ranking is required/visible) ---
+            const rankingControls = document.querySelector('.ranking-controls');
+            const isRankingVisible = rankingControls && rankingControls.style.display !== 'none';
+            
+            if (!isRankingVisible) {
+                console.log("Auto-advance check: Ranking not visible, proceeding.");
+                return true; // Ranking not required/visible, validation complete, so advance.
+            }
+            
+            // If ranking UI is visible, check if a ranking matching the CURRENT filter has been submitted
+            console.log("Auto-advance check: Ranking is visible.");
+            const rankingKey = `ranking_${currentEncounterId}_${currentNoteDate}`;
+            const rankingsList = validationResults[rankingKey];
+            
+            // Check if ANY ranking has been submitted yet
+            if (!rankingsList || !Array.isArray(rankingsList) || rankingsList.length === 0) {
+                console.log("Auto-advance check: Ranking visible, but no rankings submitted yet for this item.");
+                return false; // Ranking is needed, but none submitted yet.
+            }
+            
+            // Get the latest ranking and compare its filter state to the current filter state
+            const latestRanking = rankingsList[rankingsList.length - 1];
+            
+            // Normalize current filter (sorted array or null)
+            const currentFilter = selectedVersionKeys.length > 0 ? [...selectedVersionKeys].sort() : null;
+            
+            // Normalize filter from the latest ranking (sorted array or null)
+            const latestRankingFilter = latestRanking.filterApplied ? [...latestRanking.filterApplied].sort() : null;
+            
+            // Compare the stringified versions for equality
+            const filtersMatch = JSON.stringify(currentFilter) === JSON.stringify(latestRankingFilter);
+            
+            console.log("Auto-advance check: Comparing filters:");
+            console.log("  Current Filter:", JSON.stringify(currentFilter));
+            console.log("  Latest Ranking Filter:", JSON.stringify(latestRankingFilter));
+            console.log("  Filters Match:", filtersMatch);
+
+            if (!filtersMatch) {
+                console.log("Auto-advance check: Ranking visible, but latest ranking does not match current filter.");
+                return false; // Latest ranking submitted does not correspond to the current filter view.
+            }
+            // --- End Ranking Check ---
+
+            // If all displayed are validated AND ranking is visible AND the latest ranking matches the current filter, then advance.
+            console.log("Auto-advance check: Conditions met (validation complete, ranking matches current filter). Advancing.");
+            return true; 
         }
 
         // Modify the saveValidationResults function for denormalized export
@@ -1769,9 +1862,10 @@
                 headers.push(`${versionKey}_Comments`);
             });
             
-            // Add ranking columns
-            headers.push('Ranking_Order');
-            headers.push('Ranking_Comments');
+            // REMOVE old ranking columns, add new JSON column
+            // headers.push('Ranking_Order'); // REMOVED
+            // headers.push('Ranking_Comments'); // REMOVED
+            headers.push('Ranking_Submissions_JSON'); // ADDED
             
             // Create the CSV rows
             const csvRows = [headers.join(',')];
@@ -1903,12 +1997,30 @@
                     row.push(`"${(validation?.comment || '').replace(/"/g, '""')}"`);
                 });
                 
-                // Add ranking data
+                // Add ranking data as JSON string
                 const rankingKey = `ranking_${encounterId}_${noteDate}`;
-                const ranking = validationResults[rankingKey];
+                const rankingsList = validationResults[rankingKey]; // This is potentially a list
                 
-                row.push(ranking ? `"${ranking.order.join(',')}"` : '');
-                row.push(ranking ? `"${(ranking.comment || '').replace(/"/g, '""')}"` : '');
+                // Check if it's a valid list and stringify
+                let rankingJsonString = '';
+                if (rankingsList && Array.isArray(rankingsList) && rankingsList.length > 0) {
+                    try {
+                        // Stringify the entire list
+                        rankingJsonString = JSON.stringify(rankingsList);
+                        // Escape double quotes for CSV compatibility
+                        rankingJsonString = rankingJsonString.replace(/"/g, '""');
+                    } catch (e) {
+                        console.error("Error stringifying ranking data for row:", e);
+                        rankingJsonString = '"Error stringifying data"'; // Indicate error in output
+                    }
+                }
+                
+                // REMOVE old ranking pushes
+                // row.push(ranking ? `"${ranking.order.join(',')}"` : ''); // REMOVED
+                // row.push(ranking ? `"${(ranking.comment || '').replace(/"/g, '""')}"` : ''); // REMOVED
+                
+                // ADD the JSON string (wrapped in quotes for CSV)
+                row.push(`"${rankingJsonString}"`);
                 
                 // Add row to CSV
                 csvRows.push(row.join(','));
@@ -2018,33 +2130,44 @@
 
             // Only auto-advance if all versions have been validated
             if (shouldAutoAdvance()) {
-                // Get unique predictions for navigation
-                const uniquePredictions = getUniquePredictions();
-                const currentUniqueIndex = uniquePredictions.findIndex(p =>
-                    p.encounter_id === currentEncounterId &&
-                    p.note_date === currentNoteDate);
+                let canNavigate = false;
+                let targetFilteredIndex = -1;
+                let targetUniqueIndex = -1;
 
-                // Check if we are on the last item *before* setting timeout
-                const isLastFiltered = selectedVersionKeys.length > 0 && currentFilteredIndex >= filteredPredictionIndices.length - 1;
-                const isLastUnfiltered = selectedVersionKeys.length === 0 && currentUniqueIndex >= uniquePredictions.length - 1;
+                // Determine if a next item exists and what its index is
+                if (selectedVersionKeys.length > 0) {
+                    // Filtered navigation: Check if there is a next filtered index
+                    if (currentFilteredIndex < filteredPredictionIndices.length - 1) {
+                        canNavigate = true;
+                        targetFilteredIndex = currentFilteredIndex + 1;
+                    }
+                } else {
+                    // Unfiltered navigation: Recalculate current unique index and check if there's a next one
+                    const uniquePredictions = getUniquePredictions(); 
+                    const currentUniqueIndex = uniquePredictions.findIndex(p =>
+                        p.encounter_id === currentEncounterId &&
+                        p.note_date === currentNoteDate);
+                    if (currentUniqueIndex !== -1 && currentUniqueIndex < uniquePredictions.length - 1) {
+                        canNavigate = true;
+                        targetUniqueIndex = currentUniqueIndex + 1; 
+                    }
+                }
 
-                if (!isLastFiltered && !isLastUnfiltered) {
-                    // If not on the last item, set timeout for navigation
+                // Perform navigation or disable button
+                if (canNavigate) {
                     setTimeout(() => {
-                        // FIX: Use filtered navigation if filters are active
                         if (selectedVersionKeys.length > 0) {
-                             // We already checked we're not on the last filtered item
-                            navigateToFilteredPrediction(currentFilteredIndex + 1);
+                            navigateToFilteredPrediction(targetFilteredIndex);
                         } else {
-                            // We already checked we're not on the last unfiltered item
-                            navigateToPrediction(currentUniqueIndex + 1);
+                            navigateToPrediction(targetUniqueIndex);
                         }
                     }, 750);
                 } else {
-                    // If we *are* on the last item (filtered or unfiltered), disable the button immediately
-                    console.log("Auto-advance skipped: Last item in list.");
+                    // No next item available (already on the last one)
+                    console.log("Auto-advance skipped after validation: Last item in list.");
                     submitValidation.disabled = true; // Disable validation submit
                 }
+                // REMOVED previous logic block checking isLastFiltered/isLastUnfiltered
             }
         }
 
@@ -2513,13 +2636,35 @@
             // Reset validation UI state (buttons, comments)
             resetValidationUI(); 
             
-            // Check if multiple versions exist
+            const isFilterActive = selectedVersionKeys.length > 0;
             const versionsAvailable = versionKeys.filter(key => key !== 'compare');
             const isMultiVersion = versionsAvailable.length > 1;
 
             // --- Visibility/Interactivity Logic --- 
-            // Ranking controls (bottom) visibility
-            document.querySelector('.ranking-controls').style.display = isMultiVersion ? 'block' : 'none';
+            const rankingControls = document.querySelector('.ranking-controls');
+            const comparisonRow = document.getElementById('multiColumnComparison');
+
+            if (!isFilterActive) {
+                // If no filter is active, explicitly hide ranking and comparison
+                if (rankingControls) rankingControls.style.display = 'none';
+                if (comparisonRow) comparisonRow.style.display = 'none';
+            } else {
+                 // If filter IS active, show ranking only if multiple versions are available for ranking
+                 const actualKeysToRank = selectedVersionKeys.filter(key => 
+                    key !== 'compare' && 
+                    versionPredictions[key] && 
+                    versionPredictions[key].length > 0
+                 );
+                 if (rankingControls) {
+                     rankingControls.style.display = actualKeysToRank.length > 1 ? 'block' : 'none';
+                 }
+                 // Comparison row visibility is handled by displayPredictionDetails/renderMultiColumnComparisonRow
+                 // But ensure it's potentially visible if filter is active
+                 // (renderMultiColumnComparisonRow will hide itself if < 2 versions)
+                 if (comparisonRow) comparisonRow.style.display = 'flex'; 
+                 renderMultiColumnComparisonRow(); // Re-render comparison in case versions changed
+            }
+
             // Validation controls (right panel) container always visible
              document.querySelector('.validation-controls').style.display = 'block';
 
